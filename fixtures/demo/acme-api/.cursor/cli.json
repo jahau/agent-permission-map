@@ -1,0 +1,6 @@
+{
+  "permissions": {
+    "allow": ["Shell(git)", "Shell(npm:*)", "Write(**)", "Mcp(linear:*)"],
+    "deny": ["Shell(rm)", "Read(.env*)"]
+  }
+}

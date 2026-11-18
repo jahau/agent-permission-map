@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "permissions": {
+    "allow": ["Shell(ls)", "Shell(git:*)", "Read(src/**/*.ts)", "Write(docs/**)", "WebFetch(*.github.com)", "Mcp(datadog:*)"],
+    "deny": ["Shell(rm)", "Read(.env*)", "Write(**/*.key)", "WebFetch(*)"]
+  }
+}

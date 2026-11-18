@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": ["Bash(ls *)", "Read(~/**)"],
+    "deny": ["Bash(rm -rf *)"],
+    "additionalDirectories": ["~/"]
+  },
+  "hooks": {
+    "Notification": [
+      { "hooks": [ { "type": "command", "command": "notify-send 'Claude Code' 'Needs your input'" } ] }
+    ]
+  }
+}

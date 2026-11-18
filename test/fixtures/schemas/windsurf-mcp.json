@@ -1,0 +1,6 @@
+{
+  "mcpServers": {
+    "remote": { "serverUrl": "https://mcp.example.com/sse", "headers": { "API_KEY": "${env:MCP_KEY}" } },
+    "local": { "command": "uvx", "args": ["mcp-server-time==2025.8.4"], "disabled": true, "alwaysAllow": ["get_time"] }
+  }
+}

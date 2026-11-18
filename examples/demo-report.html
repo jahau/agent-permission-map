@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:">
+<meta name="referrer" content="no-referrer">
+<title>Agent permission map: acme-api</title><style>
+:root{--bg:#f7f7f5;--panel:#fff;--text:#1d1d1b;--muted:#5f5f5a;--border:#e2e1dc;--code:#f0efea;
+--critical:#b3261e;--critical-bg:#fbe9e7;--high:#c2410c;--high-bg:#fdeee4;--medium:#a16207;--medium-bg:#fbf3d9;
+--low:#1d4ed8;--low-bg:#e7eefc;--info:#52525b;--info-bg:#eeeeec;--ok:#15803d;--ok-bg:#e6f4ea}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--panel:#1f1f1d;--text:#ecebe6;--muted:#a3a29b;--border:#34332f;--code:#2a2a27;
+--critical:#ff8a80;--critical-bg:#3d1714;--high:#fdba74;--high-bg:#3a2112;--medium:#fcd34d;--medium-bg:#352b0e;--low:#93b4fd;--low-bg:#172440;--info:#c4c4bf;--info-bg:#2a2a27;--ok:#86efac;--ok-bg:#12301d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1120px;margin:0 auto;padding:32px 16px 64px}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:-.01em}
+h2{font-size:18px;margin:40px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+p.lede{color:var(--muted);margin:0 0 24px}
+code{font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--code);padding:1px 5px;border-radius:4px;word-break:break-word}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.card b{display:block;font-size:24px;line-height:1.2}
+.card span{color:var(--muted);font-size:13px}
+.sev{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.sev.critical{color:var(--critical);background:var(--critical-bg)}.sev.high{color:var(--high);background:var(--high-bg)}
+.sev.medium{color:var(--medium);background:var(--medium-bg)}.sev.low{color:var(--low);background:var(--low-bg)}.sev.info{color:var(--info);background:var(--info-bg)}
+.card.critical b{color:var(--critical)}.card.high b{color:var(--high)}.card.medium b{color:var(--medium)}.card.low b{color:var(--low)}
+details.finding{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--info);border-radius:8px;margin:8px 0}
+details.finding.critical{border-left-color:var(--critical)}details.finding.high{border-left-color:var(--high)}details.finding.medium{border-left-color:var(--medium)}details.finding.low{border-left-color:var(--low)}
+details.finding summary{cursor:pointer;padding:10px 14px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;list-style:none}
+details.finding summary::-webkit-details-marker{display:none}
+details.finding summary .t{font-weight:600;flex:1 1 300px}
+details.finding summary .where{color:var(--muted);font-size:13px}
+details.finding .body{padding:0 14px 12px 14px}
+details.finding .body p{margin:6px 0}
+.label{color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-right:6px}
+.tablewrap{overflow-x:auto;background:var(--panel);border:1px solid var(--border);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600;background:var(--panel);position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+td.cell{white-space:nowrap}
+.pill{display:inline-block;font-size:12px;padding:1px 7px;border-radius:999px;margin:1px 2px 1px 0}
+.pill.allow{background:var(--high-bg);color:var(--high)}.pill.ask{background:var(--medium-bg);color:var(--medium)}.pill.deny{background:var(--ok-bg);color:var(--ok)}
+.pill.broad{background:var(--critical-bg);color:var(--critical);font-weight:700}
+.muted{color:var(--muted)}
+.empty{color:var(--muted);font-style:italic;padding:12px 0}
+ul.warn{margin:4px 0 0;padding-left:18px;color:var(--muted);font-size:13px}
+footer{margin-top:48px;color:var(--muted);font-size:13px}
+</style></head><body><main>
+<h1>Agent permission map: acme-api</h1>
+<p class="lede">What your AI coding agents may do without asking, gathered from 14 configuration files (25 locations checked). Generated offline by agent-permission-map 0.1.0; no commands were run and no servers were contacted. Secret values are never included.</p>
+<div class="cards">
+<div class="card critical"><b>3</b><span>critical findings</span></div>
+<div class="card high"><b>9</b><span>high findings</span></div>
+<div class="card medium"><b>16</b><span>medium findings</span></div>
+<div class="card low"><b>4</b><span>low findings</span></div>
+<div class="card info"><b>12</b><span>info findings</span></div>
+<div class="card"><b>28</b><span>permission rules</span></div>
+<div class="card"><b>14</b><span>MCP servers</span></div>
+<div class="card"><b>2</b><span>hooks</span></div>
+</div>
+<h2>Permission map</h2>
+<p class="muted">Rules by agent and capability. <span class="pill broad">broad</span> marks rules that cover a whole capability rather than a narrow target. Where an agent supports both, deny rules take precedence over allow rules.</p>
+<div class="tablewrap"><table><thead><tr><th>Agent</th>
+<th>Shell</th>
+<th>Read files</th>
+<th>Write files</th>
+<th>Network</th>
+<th>MCP tools</th>
+<th>Extra dirs</th>
+<th>Other tools</th>
+<th>MCP servers</th></tr></thead><tbody>
+<tr><td><b>Claude Code</b></td>
+<td class="cell"><span class="pill allow">7 allow</span><span class="pill ask">1 ask</span><span class="pill deny">1 deny</span></td>
+<td class="cell"><span class="pill allow">1 allow</span><span class="pill deny">3 deny</span><span class="pill broad">broad</span></td>
+<td class="cell"><span class="pill allow">1 allow</span><span class="pill broad">broad</span></td>
+<td class="cell"><span class="pill allow">1 allow</span><span class="pill broad">broad</span></td>
+<td class="cell"><span class="pill allow">2 allow</span><span class="pill broad">broad</span></td>
+<td class="cell"><span class="pill allow">1 allow</span><span class="pill broad">broad</span></td>
+<td class="cell muted">–</td>
+<td class="cell">5</td></tr>
+<tr><td><b>Claude Desktop</b></td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell">1</td></tr>
+<tr><td><b>Codex CLI</b></td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell"><span class="pill allow">1 allow</span><span class="pill broad">broad</span></td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell">2</td></tr>
+<tr><td><b>Cursor</b></td>
+<td class="cell"><span class="pill allow">2 allow</span><span class="pill deny">1 deny</span></td>
+<td class="cell"><span class="pill deny">1 deny</span></td>
+<td class="cell"><span class="pill allow">1 allow</span><span class="pill broad">broad</span></td>
+<td class="cell muted">–</td>
+<td class="cell"><span class="pill allow">1 allow</span><span class="pill broad">broad</span></td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell">3</td></tr>
+<tr><td><b>Gemini CLI</b></td>
+<td class="cell"><span class="pill allow">2 allow</span><span class="pill broad">broad</span></td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell"><span class="pill deny">1 deny</span></td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell">1</td></tr>
+<tr><td><b>VS Code</b></td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell">2</td></tr>
+<tr><td><b>Windsurf</b></td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell muted">–</td>
+<td class="cell"><span class="muted">–</span></td></tr>
+</tbody></table></div>
+<h2>Findings</h2>
+<details class="finding critical" open><summary><span class="sev critical">critical</span><span class="t">Sessions start with permission prompts disabled</span><span class="where">Claude Code · <code>~/.claude/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>permissions.defaultMode = bypassPermissions</code></p>
+<p><span class="label">Why it matters</span>Every session starts in <code>bypassPermissions</code> mode: Claude Code runs commands, edits files (including <code>.git</code> and <code>.claude</code>) and calls tools without asking. Anthropic recommends this only inside isolated containers or VMs.</p>
+<p><span class="label">What to do</span>Remove the setting and use <code>--permission-mode bypassPermissions</code> only for sessions inside a sandbox. Consider <code>permissions.disableBypassPermissionsMode: &quot;disable&quot;</code>.</p>
+<p class="muted"><span class="label">Rule</span>claude.mode-bypass</p>
+</div></details>
+<details class="finding critical" open><summary><span class="sev critical">critical</span><span class="t">No sandbox and no approvals</span><span class="where">Codex CLI · <code>~/.codex/config.toml</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>sandbox_mode = danger-full-access, approval_policy = never (profile: yolo)</code></p>
+<p><span class="label">Why it matters</span>Codex runs every command with full filesystem and network access and never asks first. Any prompt injection becomes code execution as your user.</p>
+<p><span class="label">What to do</span>Use <code>workspace-write</code> (the default sandbox) and reserve <code>danger-full-access</code> for disposable containers.</p>
+<p class="muted"><span class="label">Rule</span>codex.sandbox-full-access</p>
+</div></details>
+<details class="finding critical" open><summary><span class="sev critical">critical</span><span class="t">Credential written directly in the config file</span><span class="where">Claude Code · <code>./.mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>postgres</code></p>
+<p><span class="label">Why it matters</span>A value in command arguments looks like a literal credential. It is stored in plain text in a file meant to be committed to the repository, ends up in backups and screen shares, and is readable by any process running as you. The value is not shown in this report.</p>
+<p><span class="label">What to do</span>Move the value to an environment variable or the client&#39;s secret input (for example <code>${env:NAME}</code> or <code>${input:id}</code>), then rotate the credential.</p>
+<p class="muted"><span class="label">Rule</span>mcp.inline-secret</p>
+</div></details>
+<details class="finding high" open><summary><span class="sev high">high</span><span class="t">Home directory or filesystem root added as a working directory</span><span class="where">Claude Code · <code>~/.claude/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>~/</code></p>
+<p><span class="label">Why it matters</span>Claude Code treats additional directories like the project: it reads them without asking and, in <code>acceptEdits</code> mode, edits them. This one covers your whole home directory or drive.</p>
+<p><span class="label">What to do</span>Add only the specific directories the project needs.</p>
+<p class="muted"><span class="label">Rule</span>claude.additional-directory-broad</p>
+</div></details>
+<details class="finding high" open><summary><span class="sev high">high</span><span class="t">Credential written directly in settings</span><span class="where">Claude Code · <code>./.claude/settings.local.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>env.GITHUB_TOKEN</code></p>
+<p><span class="label">Why it matters</span><code>env.GITHUB_TOKEN</code> looks like a literal credential. Claude Code passes it to every session and to the commands it runs. The value is not shown in this report.</p>
+<p><span class="label">What to do</span>Set the variable in your shell or a secret manager instead, and rotate the credential.</p>
+<p class="muted"><span class="label">Rule</span>claude.env-inline-secret</p>
+</div></details>
+<details class="finding high" open><summary><span class="sev high">high</span><span class="t">All of this server&#39;s tools run without confirmation</span><span class="where">Gemini CLI · <code>./.gemini/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>jira</code></p>
+<p><span class="label">Why it matters</span>The client is configured to trust this server, so every tool it exposes runs without a prompt. Tool descriptions and results are model input, so a malicious or compromised server can steer the agent and act immediately.</p>
+<p><span class="label">What to do</span>Remove the blanket trust and approve individual read-only tools instead.</p>
+<p class="muted"><span class="label">Rule</span>mcp.auto-approved</p>
+</div></details>
+<details class="finding high" open><summary><span class="sev high">high</span><span class="t">Container runs with host-level access</span><span class="where">VS Code · <code>./.vscode/mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>sqlite</code></p>
+<p><span class="label">Why it matters</span>The container is started with a host root, home or Docker socket mount, which removes most of the isolation a container would otherwise provide.</p>
+<p><span class="label">What to do</span>Drop the privileged options and mount only the directories the server needs, read-only where possible.</p>
+<p class="muted"><span class="label">Rule</span>mcp.container-escape</p>
+</div></details>
+<details class="finding high" open><summary><span class="sev high">high</span><span class="t">Credential written directly in the config file</span><span class="where">Cursor · <code>~/.cursor/mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>notes</code></p>
+<p><span class="label">Why it matters</span>A value in <code>env.NOTES_API_KEY</code> looks like a literal credential. It is stored in plain text, ends up in backups and screen shares, and is readable by any process running as you. The value is not shown in this report.</p>
+<p><span class="label">What to do</span>Move the value to an environment variable or the client&#39;s secret input (for example <code>${env:NAME}</code> or <code>${input:id}</code>), then rotate the credential.</p>
+<p class="muted"><span class="label">Rule</span>mcp.inline-secret</p>
+</div></details>
+<details class="finding high" open><summary><span class="sev high">high</span><span class="t">Remote server is reached without TLS</span><span class="where">Claude Code · <code>./.mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>internal-docs</code></p>
+<p><span class="label">Why it matters</span><code>docs.acme.internal</code> is contacted over <code>http</code>. Anyone on the network path can read tool calls and results, and can inject tool descriptions or responses.</p>
+<p><span class="label">What to do</span>Use an <code>https://</code> (or <code>wss://</code>) URL.</p>
+<p class="muted"><span class="label">Rule</span>mcp.plaintext-remote</p>
+</div></details>
+<details class="finding high" open><summary><span class="sev high">high</span><span class="t">Every shell command runs without asking</span><span class="where">Gemini CLI · <code>./.gemini/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>run_shell_command</code></p>
+<p><span class="label">Why it matters</span>Gemini CLI will run any shell command the model chooses without a confirmation prompt. A prompt injection in a file, web page or tool result can then run arbitrary code with your user&#39;s permissions. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.</p>
+<p><span class="label">What to do</span>Replace the blanket rule with specific commands (for example <code>npm test</code>), and add deny rules for network and destructive commands.</p>
+<p class="muted"><span class="label">Rule</span>shell.allow-all</p>
+</div></details>
+<details class="finding high" open><summary><span class="sev high">high</span><span class="t"><code>python</code> may run with any arguments</span><span class="where">Claude Code · <code>./.claude/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>Bash(python *)</code></p>
+<p><span class="label">Why it matters</span><code>python</code> executes whatever code or command it is given, so allowing it with a wildcard is equivalent to allowing every shell command. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.</p>
+<p><span class="label">What to do</span>Allow the exact invocations you need instead of <code>python</code> with a wildcard.</p>
+<p class="muted"><span class="label">Rule</span>shell.allow-code-runner</p>
+</div></details>
+<details class="finding high" open><summary><span class="sev high">high</span><span class="t"><code>docker</code> may run with any arguments</span><span class="where">Claude Code · <code>./.claude/settings.local.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>Bash(docker *)</code></p>
+<p><span class="label">Why it matters</span><code>docker</code> executes whatever code or command it is given, so allowing it with a wildcard is equivalent to allowing every shell command.</p>
+<p><span class="label">What to do</span>Allow the exact invocations you need instead of <code>docker</code> with a wildcard.</p>
+<p class="muted"><span class="label">Rule</span>shell.allow-code-runner</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t">Fetches to any domain are approved</span><span class="where">Claude Code · <code>./.claude/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>WebFetch</code></p>
+<p><span class="label">Why it matters</span>Claude Code can request any URL without asking. Data can be sent out in the URL itself, and fetched pages are a common prompt-injection source. This file is committed with the repository, so the rule applies to everyone who trusts the folder.</p>
+<p><span class="label">What to do</span>Allow specific domains with <code>WebFetch(domain:example.com)</code>.</p>
+<p class="muted"><span class="label">Rule</span>claude.allow-all-fetch</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t">File edits are approved everywhere the rule reaches</span><span class="where">Claude Code · <code>./.claude/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>Edit</code></p>
+<p><span class="label">Why it matters</span>Claude Code can create and modify files without asking, including build scripts, CI workflows and git hooks that later run code. This file is committed with the repository, so the rule applies to everyone who trusts the folder.</p>
+<p><span class="label">What to do</span>Prefer <code>acceptEdits</code> mode for a session, or scope the rule to source directories (for example <code>Edit(./src/**)</code>).</p>
+<p class="muted"><span class="label">Rule</span>claude.allow-all-writes</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t">Reads outside the project are approved</span><span class="where">Claude Code · <code>~/.claude/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>Read(~/**)</code></p>
+<p><span class="label">Why it matters</span>The rule lets Claude Code read files across your home directory or the whole filesystem without asking, including SSH keys, cloud credentials and browser data.</p>
+<p><span class="label">What to do</span>Limit read rules to the project or to specific directories, and add deny rules for credential paths.</p>
+<p class="muted"><span class="label">Rule</span>claude.allow-reads-outside-project</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t">MCP servers from project files are approved automatically</span><span class="where">Claude Code · <code>./.claude/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>enableAllProjectMcpServers = true</code></p>
+<p><span class="label">Why it matters</span>Every server in this project&#39;s <code>.mcp.json</code> starts without its approval prompt once the folder is trusted, including servers added by later commits.</p>
+<p><span class="label">What to do</span>Remove the setting and approve servers by name with <code>enabledMcpjsonServers</code>.</p>
+<p class="muted"><span class="label">Rule</span>claude.enable-all-project-mcp</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t">Repository settings run a shell command automatically</span><span class="where">Claude Code · <code>./.claude/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>PostToolUse [Edit|Write]: npx prettier --write &quot;$CLAUDE_PROJECT_DIR&quot;/src</code></p>
+<p><span class="label">Why it matters</span>On <code>PostToolUse</code>, Claude Code runs this command with your user&#39;s permissions, without a prompt, once the folder is trusted. Anyone who can change this file can change what runs.</p>
+<p><span class="label">What to do</span>Review the command and the script it calls; keep such hooks small and in-repo.</p>
+<p class="muted"><span class="label">Rule</span>claude.hook-command</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t">Codex never asks before running commands</span><span class="where">Codex CLI · <code>./.codex/config.toml</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>approval_policy = never</code></p>
+<p><span class="label">Why it matters</span>Within the sandbox, commands run without any approval prompt, and failures are not escalated to you. The sandbox still limits writes to the workspace.</p>
+<p><span class="label">What to do</span>Use <code>on-request</code> for interactive work; keep <code>never</code> for CI runs in disposable environments.</p>
+<p class="muted"><span class="label">Rule</span>codex.approval-never</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t">Sandboxed commands can reach the network</span><span class="where">Codex CLI · <code>./.codex/config.toml</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>sandbox_workspace_write.network_access = true</code></p>
+<p><span class="label">Why it matters</span>Commands inside the sandbox may open outbound connections, so a prompt-injected command can upload workspace files or fetch and run code.</p>
+<p><span class="label">What to do</span>Leave network access off and allow it per task.</p>
+<p class="muted"><span class="label">Rule</span>codex.sandbox-network</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t">File writes are approved everywhere the rule reaches</span><span class="where">Cursor · <code>./.cursor/cli.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>Write(**)</code></p>
+<p><span class="label">Why it matters</span>The Cursor agent can create and modify any file in the workspace without asking, including scripts and CI files that run code later.</p>
+<p><span class="label">What to do</span>Scope write rules to the directories the agent should change.</p>
+<p class="muted"><span class="label">Rule</span>cursor.allow-all-writes</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t">Server is started through an inline script</span><span class="where">Claude Code · <code>./.mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>build-tools</code></p>
+<p><span class="label">Why it matters</span>The server is launched as <code>bash -c …</code>, so the real command is a script string. Inline scripts are hard to review and can chain extra commands, downloads or environment changes before the server starts.</p>
+<p><span class="label">What to do</span>Point <code>command</code> at the server executable directly, or move the script into a reviewed file in the repository.</p>
+<p class="muted"><span class="label">Rule</span>mcp.shell-wrapper</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t"><code>npx</code> downloads <code>@modelcontextprotocol/server-postgres</code> without a fixed version</span><span class="where">Claude Code · <code>./.mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>postgres</code></p>
+<p><span class="label">Why it matters</span>Each start resolves the newest published version of <code>@modelcontextprotocol/server-postgres</code> and runs it with your user&#39;s permissions. A compromised or hijacked release reaches you automatically, before you review it.</p>
+<p><span class="label">What to do</span>Pin an exact version (for example <code>@modelcontextprotocol/server-postgres@1.2.3</code>) and update it deliberately.</p>
+<p class="muted"><span class="label">Rule</span>mcp.unpinned-package</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t"><code>npx</code> downloads <code>@modelcontextprotocol/server-filesystem</code> without a fixed version</span><span class="where">Claude Desktop · <code>~/AppData/Roaming/Claude/claude_desktop_config.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>filesystem</code></p>
+<p><span class="label">Why it matters</span>Each start resolves the newest published version of <code>@modelcontextprotocol/server-filesystem</code> and runs it with your user&#39;s permissions. A compromised or hijacked release reaches you automatically, before you review it.</p>
+<p><span class="label">What to do</span>Pin an exact version (for example <code>@modelcontextprotocol/server-filesystem@1.2.3</code>) and update it deliberately.</p>
+<p class="muted"><span class="label">Rule</span>mcp.unpinned-package</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t"><code>uvx</code> downloads <code>mcp-server-fetch</code> without a fixed version</span><span class="where">Codex CLI · <code>./.codex/config.toml</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>fetch</code></p>
+<p><span class="label">Why it matters</span>Each start resolves the newest published version of <code>mcp-server-fetch</code> and runs it with your user&#39;s permissions. A compromised or hijacked release reaches you automatically, before you review it.</p>
+<p><span class="label">What to do</span>Pin an exact version (for example <code>mcp-server-fetch@1.2.3</code>) and update it deliberately.</p>
+<p class="muted"><span class="label">Rule</span>mcp.unpinned-package</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t"><code>npx</code> downloads <code>@playwright/mcp@latest</code> without a fixed version</span><span class="where">Cursor · <code>./.cursor/mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>browser</code></p>
+<p><span class="label">Why it matters</span>Each start resolves the newest published version of <code>@playwright/mcp@latest</code> and runs it with your user&#39;s permissions. A compromised or hijacked release reaches you automatically, before you review it.</p>
+<p><span class="label">What to do</span>Pin an exact version (for example <code>@playwright/mcp@1.2.3</code>) and update it deliberately.</p>
+<p class="muted"><span class="label">Rule</span>mcp.unpinned-package</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t"><code>git</code> may run with any arguments</span><span class="where">Cursor · <code>./.cursor/cli.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>Shell(git)</code></p>
+<p><span class="label">Why it matters</span><code>git</code> can delete or rewrite files and history. With a wildcard there is no prompt before, for example, a recursive delete or a force push. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.</p>
+<p><span class="label">What to do</span>Allow the specific, non-destructive forms you need, and add deny or ask rules for the destructive ones.</p>
+<p class="muted"><span class="label">Rule</span>shell.allow-destructive</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t"><code>curl</code> may reach any host</span><span class="where">Claude Code · <code>./.claude/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>Bash(curl *)</code></p>
+<p><span class="label">Why it matters</span>A wildcard rule for <code>curl</code> lets the agent download code or upload local files to any address without asking, which is the usual exfiltration path after a prompt injection. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.</p>
+<p><span class="label">What to do</span>Remove the rule and use the agent&#39;s own fetch tool with a domain allowlist, or allow only specific URLs.</p>
+<p class="muted"><span class="label">Rule</span>shell.allow-network-tool</p>
+</div></details>
+<details class="finding medium"><summary><span class="sev medium">medium</span><span class="t"><code>npm</code> may run any project script</span><span class="where">Cursor · <code>./.cursor/cli.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>Shell(npm:*)</code></p>
+<p><span class="label">Why it matters</span><code>npm</code> with a wildcard runs whatever the project&#39;s build files define, and some subcommands install or execute packages. The agent can edit those files and then run them. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.</p>
+<p><span class="label">What to do</span>Allow the specific subcommands you need (for example <code>npm test</code>).</p>
+<p class="muted"><span class="label">Rule</span>shell.allow-script-runner</p>
+</div></details>
+<details class="finding low"><summary><span class="sev low">low</span><span class="t">Every tool of MCP server <code>github</code> runs without asking</span><span class="where">Claude Code · <code>./.claude/settings.local.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>mcp__github__*</code></p>
+<p><span class="label">Why it matters</span>Tools added to the server later are approved automatically too, including ones that write data or call external services.</p>
+<p><span class="label">What to do</span>List the specific tools instead (for example <code>mcp__github__search</code>).</p>
+<p class="muted"><span class="label">Rule</span>claude.allow-mcp-server</p>
+</div></details>
+<details class="finding low"><summary><span class="sev low">low</span><span class="t">File edits are accepted without asking</span><span class="where">Claude Code · <code>./.claude/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>permissions.defaultMode = acceptEdits</code></p>
+<p><span class="label">Why it matters</span>File edits and common filesystem commands in the working directories run without a prompt. Edits to build scripts or CI files can lead to code running later.</p>
+<p><span class="label">What to do</span>Review diffs before running builds, or use the default mode for untrusted repositories.</p>
+<p class="muted"><span class="label">Rule</span>claude.mode-accept-edits</p>
+</div></details>
+<details class="finding low"><summary><span class="sev low">low</span><span class="t">Every tool of MCP server <code>linear</code> runs without asking</span><span class="where">Cursor · <code>./.cursor/cli.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>Mcp(linear:*)</code></p>
+<p><span class="label">Why it matters</span>Tools added later are approved automatically too, including ones that write data or call external services.</p>
+<p><span class="label">What to do</span>List individual tools, for example <code>Mcp(github:get_issue)</code>.</p>
+<p class="muted"><span class="label">Rule</span>cursor.allow-mcp-wildcard</p>
+</div></details>
+<details class="finding low"><summary><span class="sev low">low</span><span class="t">File edits are approved automatically</span><span class="where">Gemini CLI · <code>./.gemini/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>general.defaultApprovalMode = auto_edit</code></p>
+<p><span class="label">Why it matters</span>Edit tools run without a prompt in every session. Edits to build scripts or CI files can lead to code running later.</p>
+<p><span class="label">What to do</span>Use the default mode for repositories you do not control.</p>
+<p class="muted"><span class="label">Rule</span>gemini.mode-auto-edit</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">Hook runs a shell command automatically</span><span class="where">Claude Code · <code>~/.claude/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>Notification: notify-send &#39;Claude Code&#39; &#39;Needs your input&#39;</code></p>
+<p><span class="label">Why it matters</span>On <code>Notification</code>, Claude Code runs this command without a prompt. Hooks are not limited by permission rules.</p>
+<p><span class="label">What to do</span>Confirm the command is one you added and still need.</p>
+<p class="muted"><span class="label">Rule</span>claude.hook-command</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">Repository config can start a local process</span><span class="where">Claude Code · <code>./.mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>build-tools</code></p>
+<p><span class="label">Why it matters</span>This server is defined in a file inside the project. After you approve it, the client starts the command with your user&#39;s permissions every session, and later commits can change the command.</p>
+<p><span class="label">What to do</span>Review changes to this file in code review as you would changes to a build script.</p>
+<p class="muted"><span class="label">Rule</span>mcp.project-command</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">Repository config can start a local process</span><span class="where">Claude Code · <code>./.mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>filesystem</code></p>
+<p><span class="label">Why it matters</span>This server is defined in a file inside the project. After you approve it, the client starts the command with your user&#39;s permissions every session, and later commits can change the command.</p>
+<p><span class="label">What to do</span>Review changes to this file in code review as you would changes to a build script.</p>
+<p class="muted"><span class="label">Rule</span>mcp.project-command</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">Repository config can start a local process</span><span class="where">Claude Code · <code>./.mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>postgres</code></p>
+<p><span class="label">Why it matters</span>This server is defined in a file inside the project. After you approve it, the client starts the command with your user&#39;s permissions every session, and later commits can change the command.</p>
+<p><span class="label">What to do</span>Review changes to this file in code review as you would changes to a build script.</p>
+<p class="muted"><span class="label">Rule</span>mcp.project-command</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">Repository config can start a local process</span><span class="where">Codex CLI · <code>./.codex/config.toml</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>fetch</code></p>
+<p><span class="label">Why it matters</span>This server is defined in a file inside the project. After you approve it, the client starts the command with your user&#39;s permissions every session, and later commits can change the command.</p>
+<p><span class="label">What to do</span>Review changes to this file in code review as you would changes to a build script.</p>
+<p class="muted"><span class="label">Rule</span>mcp.project-command</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">Repository config can start a local process</span><span class="where">Cursor · <code>./.cursor/mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>browser</code></p>
+<p><span class="label">Why it matters</span>This server is defined in a file inside the project. After you approve it, the client starts the command with your user&#39;s permissions every session, and later commits can change the command.</p>
+<p><span class="label">What to do</span>Review changes to this file in code review as you would changes to a build script.</p>
+<p class="muted"><span class="label">Rule</span>mcp.project-command</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">Repository config can start a local process</span><span class="where">VS Code · <code>./.vscode/mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>sqlite</code></p>
+<p><span class="label">Why it matters</span>This server is defined in a file inside the project. After you approve it, the client starts the command with your user&#39;s permissions every session, and later commits can change the command.</p>
+<p><span class="label">What to do</span>Review changes to this file in code review as you would changes to a build script.</p>
+<p class="muted"><span class="label">Rule</span>mcp.project-command</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">Tool calls are sent to <code>api.githubcopilot.com</code></span><span class="where">Codex CLI · <code>~/.codex/config.toml</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>github</code></p>
+<p><span class="label">Why it matters</span>Arguments the agent passes to this server&#39;s tools, which can include file contents, leave your machine for <code>api.githubcopilot.com</code>.</p>
+<p><span class="label">What to do</span>Confirm you trust the operator of this host with the data your agent handles.</p>
+<p class="muted"><span class="label">Rule</span>mcp.remote-server</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">Tool calls are sent to <code>mcp.linear.app</code></span><span class="where">Cursor · <code>./.cursor/mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>linear</code></p>
+<p><span class="label">Why it matters</span>Arguments the agent passes to this server&#39;s tools, which can include file contents, leave your machine for <code>mcp.linear.app</code>.</p>
+<p><span class="label">What to do</span>Confirm you trust the operator of this host with the data your agent handles.</p>
+<p class="muted"><span class="label">Rule</span>mcp.remote-server</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">Tool calls are sent to <code>jira.acme.example</code></span><span class="where">Gemini CLI · <code>./.gemini/settings.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>jira</code></p>
+<p><span class="label">Why it matters</span>Arguments the agent passes to this server&#39;s tools, which can include file contents, leave your machine for <code>jira.acme.example</code>.</p>
+<p><span class="label">What to do</span>Confirm you trust the operator of this host with the data your agent handles.</p>
+<p class="muted"><span class="label">Rule</span>mcp.remote-server</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">Tool calls are sent to <code>api.githubcopilot.com</code></span><span class="where">VS Code · <code>./.vscode/mcp.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>github</code></p>
+<p><span class="label">Why it matters</span>Arguments the agent passes to this server&#39;s tools, which can include file contents, leave your machine for <code>api.githubcopilot.com</code>.</p>
+<p><span class="label">What to do</span>Confirm you trust the operator of this host with the data your agent handles.</p>
+<p class="muted"><span class="label">Rule</span>mcp.remote-server</p>
+</div></details>
+<details class="finding info"><summary><span class="sev info">info</span><span class="t">File could not be analyzed</span><span class="where">Windsurf · <code>~/.codeium/windsurf/mcp_config.json</code></span></summary>
+<div class="body">
+<p><span class="label">Subject</span><code>~/.codeium/windsurf/mcp_config.json</code></p>
+<p><span class="label">Why it matters</span>invalid JSON: CommaExpected at line 5, column 7. The agent may also fail to load this file, or load it differently; its permissions are not part of this report.</p>
+<p><span class="label">What to do</span>Fix the file, then scan again.</p>
+<p class="muted"><span class="label">Rule</span>source.unreadable</p>
+</div></details>
+<h2>MCP servers</h2>
+<div class="tablewrap"><table><thead><tr><th>Server</th><th>Agent</th><th>Transport</th><th>Launches / connects to</th><th>Env &amp; headers (names only)</th><th>Auto-approve</th><th>Source</th></tr></thead><tbody>
+<tr><td><b>memory</b><br><span class="muted">user scope</span></td><td>Claude Code</td><td>stdio</td><td><code>npx -y @modelcontextprotocol/server-memory@2025.8.4</code></td><td><span class="muted">–</span></td><td>unspecified</td><td><code>~/.claude.json</code></td></tr>
+<tr><td><b>build-tools</b></td><td>Claude Code</td><td>stdio</td><td><code>bash -c cd tools &amp;&amp; ./mcp-server.sh --stdio</code></td><td><span class="muted">–</span></td><td>unspecified</td><td><code>./.mcp.json</code></td></tr>
+<tr><td><b>filesystem</b></td><td>Claude Code</td><td>stdio</td><td><code>npx -y @modelcontextprotocol/server-filesystem@2025.8.21 ./src</code></td><td><span class="muted">–</span></td><td>unspecified</td><td><code>./.mcp.json</code></td></tr>
+<tr><td><b>internal-docs</b></td><td>Claude Code</td><td>http</td><td><code>http://docs.acme.internal/mcp</code></td><td><span class="muted">–</span></td><td>unspecified</td><td><code>./.mcp.json</code></td></tr>
+<tr><td><b>postgres</b></td><td>Claude Code</td><td>stdio</td><td><code>npx -y @modelcontextprotocol/server-postgres postgresql://[REDACTED]@db.acme.internal:5432/app</code></td><td><span class="muted">–</span></td><td>unspecified</td><td><code>./.mcp.json</code></td></tr>
+<tr><td><b>filesystem</b></td><td>Claude Desktop</td><td>stdio</td><td><code>npx -y @modelcontextprotocol/server-filesystem ~/Documents</code></td><td><span class="muted">–</span></td><td>unspecified</td><td><code>~/AppData/Roaming/Claude/claude_desktop_config.json</code></td></tr>
+<tr><td><b>github</b></td><td>Codex CLI</td><td>http</td><td><code>https://api.githubcopilot.com/mcp/</code></td><td><code>header:Authorization</code></td><td>unspecified</td><td><code>~/.codex/config.toml</code></td></tr>
+<tr><td><b>fetch</b></td><td>Codex CLI</td><td>stdio</td><td><code>uvx mcp-server-fetch</code></td><td><span class="muted">–</span></td><td>unspecified</td><td><code>./.codex/config.toml</code></td></tr>
+<tr><td><b>notes</b></td><td>Cursor</td><td>stdio</td><td><code>node /opt/notes-mcp/index.js</code></td><td><code>env:NOTES_API_KEY</code></td><td>unspecified</td><td><code>~/.cursor/mcp.json</code></td></tr>
+<tr><td><b>browser</b></td><td>Cursor</td><td>stdio</td><td><code>npx @playwright/mcp@latest</code></td><td><span class="muted">–</span></td><td>unspecified</td><td><code>./.cursor/mcp.json</code></td></tr>
+<tr><td><b>linear</b></td><td>Cursor</td><td>http</td><td><code>https://mcp.linear.app/sse</code></td><td><code>header:Authorization</code></td><td>unspecified</td><td><code>./.cursor/mcp.json</code></td></tr>
+<tr><td><b>jira</b></td><td>Gemini CLI</td><td>http</td><td><code>https://jira.acme.example/mcp</code></td><td><span class="muted">–</span></td><td>all</td><td><code>./.gemini/settings.json</code></td></tr>
+<tr><td><b>github</b></td><td>VS Code</td><td>http</td><td><code>https://api.githubcopilot.com/mcp/</code></td><td><code>header:Authorization</code></td><td>unspecified</td><td><code>./.vscode/mcp.json</code></td></tr>
+<tr><td><b>sqlite</b></td><td>VS Code</td><td>stdio</td><td><code>docker run -i --rm -v /:/host mcp/sqlite --db-path /host/tmp/app.db</code></td><td><span class="muted">–</span></td><td>unspecified</td><td><code>./.vscode/mcp.json</code></td></tr>
+</tbody></table></div>
+<h2>All permission rules</h2>
+<div class="tablewrap"><table><thead><tr><th>Effect</th><th>Rule</th><th>Capability</th><th>Agent</th><th>Source</th></tr></thead><tbody>
+<tr><td><span class="pill deny">deny</span></td><td><code>Bash(rm -rf *)</code></td><td>shell</td><td>Claude Code</td><td><code>~/.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span></td><td><code>Bash(ls *)</code></td><td>shell</td><td>Claude Code</td><td><code>~/.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span><span class="pill broad">broad</span></td><td><code>Read(~/**)</code></td><td>file-read</td><td>Claude Code</td><td><code>~/.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span><span class="pill broad">broad</span></td><td><code>~/</code></td><td>directory</td><td>Claude Code</td><td><code>~/.claude/settings.json</code></td></tr>
+<tr><td><span class="pill deny">deny</span></td><td><code>Read(./.env)</code></td><td>file-read</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill deny">deny</span></td><td><code>Read(./.env.*)</code></td><td>file-read</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill deny">deny</span></td><td><code>Read(./secrets/**)</code></td><td>file-read</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill ask">ask</span></td><td><code>Bash(git push *)</code></td><td>shell</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span></td><td><code>Bash(curl *)</code></td><td>shell</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span></td><td><code>Bash(git diff *)</code></td><td>shell</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span></td><td><code>Bash(git status)</code></td><td>shell</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span></td><td><code>Bash(npm run test *)</code></td><td>shell</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span></td><td><code>Bash(python *)</code></td><td>shell</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span><span class="pill broad">broad</span></td><td><code>Edit</code></td><td>file-write</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span><span class="pill broad">broad</span></td><td><code>WebFetch</code></td><td>network</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span></td><td><code>mcp__postgres__query</code></td><td>mcp</td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span></td><td><code>Bash(docker *)</code></td><td>shell</td><td>Claude Code</td><td><code>./.claude/settings.local.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span><span class="pill broad">broad</span></td><td><code>mcp__github__*</code></td><td>mcp</td><td>Claude Code</td><td><code>./.claude/settings.local.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span><span class="pill broad">broad</span></td><td><code>sandbox_workspace_write.network_access = true</code></td><td>network</td><td>Codex CLI</td><td><code>./.codex/config.toml</code></td></tr>
+<tr><td><span class="pill deny">deny</span></td><td><code>Read(.env*)</code></td><td>file-read</td><td>Cursor</td><td><code>./.cursor/cli.json</code></td></tr>
+<tr><td><span class="pill deny">deny</span></td><td><code>Shell(rm)</code></td><td>shell</td><td>Cursor</td><td><code>./.cursor/cli.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span><span class="pill broad">broad</span></td><td><code>Mcp(linear:*)</code></td><td>mcp</td><td>Cursor</td><td><code>./.cursor/cli.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span></td><td><code>Shell(git)</code></td><td>shell</td><td>Cursor</td><td><code>./.cursor/cli.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span></td><td><code>Shell(npm:*)</code></td><td>shell</td><td>Cursor</td><td><code>./.cursor/cli.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span><span class="pill broad">broad</span></td><td><code>Write(**)</code></td><td>file-write</td><td>Cursor</td><td><code>./.cursor/cli.json</code></td></tr>
+<tr><td><span class="pill deny">deny</span></td><td><code>web_fetch</code></td><td>network</td><td>Gemini CLI</td><td><code>./.gemini/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span><span class="pill broad">broad</span></td><td><code>run_shell_command</code></td><td>shell</td><td>Gemini CLI</td><td><code>./.gemini/settings.json</code></td></tr>
+<tr><td><span class="pill allow">allow</span></td><td><code>run_shell_command(git status)</code></td><td>shell</td><td>Gemini CLI</td><td><code>./.gemini/settings.json</code></td></tr>
+</tbody></table></div>
+<h2>Hooks</h2>
+<div class="tablewrap"><table><thead><tr><th>Event</th><th>Matcher</th><th>Command</th><th>Source</th></tr></thead><tbody>
+<tr><td>Notification</td><td><span class="muted">–</span></td><td><code>notify-send &#39;Claude Code&#39; &#39;Needs your input&#39;</code></td><td><code>~/.claude/settings.json</code></td></tr>
+<tr><td>PostToolUse</td><td><code>Edit|Write</code></td><td><code>npx prettier --write &quot;$CLAUDE_PROJECT_DIR&quot;/src</code></td><td><code>./.claude/settings.json</code></td></tr>
+</tbody></table></div>
+<h2>Modes, sandbox and approval settings</h2>
+<div class="tablewrap"><table><thead><tr><th>Setting</th><th>Value</th><th>Agent</th><th>Source</th></tr></thead><tbody>
+<tr><td><code>permissions.defaultMode</code></td><td><code>bypassPermissions</code></td><td>Claude Code</td><td><code>~/.claude/settings.json</code></td></tr>
+<tr><td><code>enableAllProjectMcpServers</code></td><td><code>true</code></td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><code>env</code></td><td><code>NODE_ENV</code></td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><code>permissions.defaultMode</code></td><td><code>acceptEdits</code></td><td>Claude Code</td><td><code>./.claude/settings.json</code></td></tr>
+<tr><td><code>env</code></td><td><code>GITHUB_TOKEN</code></td><td>Claude Code</td><td><code>./.claude/settings.local.json</code></td></tr>
+<tr><td><code>approval_policy</code></td><td><code>on-request</code></td><td>Codex CLI</td><td><code>~/.codex/config.toml</code></td></tr>
+<tr><td><code>approval_policy</code> <span class="muted">profile: yolo</span></td><td><code>never</code></td><td>Codex CLI</td><td><code>~/.codex/config.toml</code></td></tr>
+<tr><td><code>sandbox_mode</code> <span class="muted">profile: yolo</span></td><td><code>danger-full-access</code></td><td>Codex CLI</td><td><code>~/.codex/config.toml</code></td></tr>
+<tr><td><code>approval_policy</code></td><td><code>never</code></td><td>Codex CLI</td><td><code>./.codex/config.toml</code></td></tr>
+<tr><td><code>sandbox_mode</code></td><td><code>workspace-write</code></td><td>Codex CLI</td><td><code>./.codex/config.toml</code></td></tr>
+<tr><td><code>sandbox_workspace_write.network_access</code></td><td><code>true</code></td><td>Codex CLI</td><td><code>./.codex/config.toml</code></td></tr>
+<tr><td><code>general.defaultApprovalMode</code></td><td><code>auto_edit</code></td><td>Gemini CLI</td><td><code>./.gemini/settings.json</code></td></tr>
+<tr><td><code>inputs</code></td><td><code>github-token (password)</code></td><td>VS Code</td><td><code>./.vscode/mcp.json</code></td></tr>
+</tbody></table></div>
+<h2>Configuration files</h2>
+<div class="tablewrap"><table><thead><tr><th>ID</th><th>File</th><th>Agent</th><th>Scope</th><th>Status</th></tr></thead><tbody>
+<tr><td>S01</td><td><code>~/.claude.json</code></td><td>Claude Code</td><td>user</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S02</td><td><code>~/.claude/settings.json</code></td><td>Claude Code</td><td>user</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S03</td><td><code>./.claude/settings.json</code></td><td>Claude Code</td><td>project</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S04</td><td><code>./.mcp.json</code></td><td>Claude Code</td><td>project</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S05</td><td><code>./.claude/settings.local.json</code></td><td>Claude Code</td><td>local</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S06</td><td><code>~/AppData/Roaming/Claude/claude_desktop_config.json</code></td><td>Claude Desktop</td><td>user</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S07</td><td><code>~/.codex/config.toml</code></td><td>Codex CLI</td><td>user</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S08</td><td><code>./.codex/config.toml</code></td><td>Codex CLI</td><td>project</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S09</td><td><code>~/.cursor/mcp.json</code></td><td>Cursor</td><td>user</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S10</td><td><code>./.cursor/cli.json</code></td><td>Cursor</td><td>project</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S11</td><td><code>./.cursor/mcp.json</code></td><td>Cursor</td><td>project</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S12</td><td><code>./.gemini/settings.json</code></td><td>Gemini CLI</td><td>project</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S13</td><td><code>./.vscode/mcp.json</code></td><td>VS Code</td><td>project</td><td><span class="sev info">parsed</span></td></tr>
+<tr><td>S14</td><td><code>~/.codeium/windsurf/mcp_config.json</code></td><td>Windsurf</td><td>user</td><td><span class="sev high">error</span> invalid JSON: CommaExpected at line 5, column 7</td></tr>
+</tbody></table></div>
+<footer>Static report. Explanations describe what each setting allows according to the agent's documentation; they are not proof of compromise. Review findings in context.</footer>
+</main></body></html>

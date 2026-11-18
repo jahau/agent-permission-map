@@ -1,0 +1,63 @@
+{
+  "name": "agent-permission-map",
+  "version": "0.1.0",
+  "description": "Read-only, offline inventory of AI coding agent permissions and MCP server configuration, with risk explanations and JSON/HTML reports.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "agent-permission-map": "dist/bin.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "fixtures/demo",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "SECURITY.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:test": "tsc -p tsconfig.test.json",
+    "test": "npm run build:test && node --test \"build-test/test/*.test.js\"",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit",
+    "demo": "npm run build && node dist/bin.js demo",
+    "demo:write": "npm run build && node scripts/write-examples.mjs",
+    "licenses": "node scripts/check-licenses.mjs",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai-agents",
+    "claude-code",
+    "cursor",
+    "codex",
+    "gemini-cli",
+    "security",
+    "permissions",
+    "audit"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jahau/agent-permission-map.git"
+  },
+  "dependencies": {
+    "jsonc-parser": "3.3.1",
+    "smol-toml": "1.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.9.3"
+  }
+}

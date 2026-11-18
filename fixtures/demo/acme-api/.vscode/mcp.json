@@ -1,0 +1,18 @@
+// VS Code allows comments in this file.
+{
+  "inputs": [
+    { "type": "promptString", "id": "github-token", "description": "GitHub token", "password": true }
+  ],
+  "servers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": { "Authorization": "Bearer ${input:github-token}" }
+    },
+    "sqlite": {
+      "type": "stdio",
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "-v", "/:/host", "mcp/sqlite", "--db-path", "/host/tmp/app.db"]
+    }
+  }
+}

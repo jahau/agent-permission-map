@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "local": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${workspaceFolder}/tools/server.js"],
+      "env": { "API_KEY": "${env:API_KEY}" },
+      "envFile": "${workspaceFolder}/.env"
+    },
+    "remote": {
+      "url": "https://mcp.example.com/mcp",
+      "headers": { "Authorization": "Bearer ${env:MY_TOKEN}" },
+      "auth": { "CLIENT_ID": "abc", "scopes": ["read"] }
+    }
+  }
+}

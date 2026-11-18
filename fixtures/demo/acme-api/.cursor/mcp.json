@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "browser": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    },
+    "linear": {
+      "url": "https://mcp.linear.app/sse",
+      "headers": { "Authorization": "Bearer ${env:LINEAR_API_KEY}" }
+    }
+  }
+}

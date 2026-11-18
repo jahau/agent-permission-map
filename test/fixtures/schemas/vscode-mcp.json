@@ -1,0 +1,23 @@
+{
+  // Comments are allowed in VS Code's mcp.json.
+  "inputs": [
+    { "type": "promptString", "id": "api-key", "description": "API key", "password": true }
+  ],
+  "servers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@0.0.41"],
+      "cwd": "${workspaceFolder}",
+      "env": { "API_KEY": "${input:api-key}" },
+      "envFile": "${workspaceFolder}/.env",
+      "sandboxEnabled": true
+    },
+    "remote": {
+      "type": "http",
+      "url": "https://mcp.example.com/mcp",
+      "headers": { "Authorization": "Bearer ${input:api-key}" },
+      "oauth": { "clientId": "example-client-id" },
+    }
+  }
+}

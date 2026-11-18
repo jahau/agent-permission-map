@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker *)",
+      "mcp__github__*"
+    ]
+  },
+  "env": {
+    "GITHUB_TOKEN": "demo-not-a-real-token-value"
+  }
+}

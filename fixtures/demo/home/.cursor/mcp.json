@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "notes": {
+      "command": "node",
+      "args": ["/opt/notes-mcp/index.js"],
+      "env": { "NOTES_API_KEY": "demo-inline-api-key-value" }
+    }
+  }
+}
