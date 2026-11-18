@@ -10,6 +10,14 @@ each one is easy to miss on its own, and nobody reads all of them side by side.
 
 `agent-permission-map` finds those files, normalizes them into one model, and explains each
 risky setting in plain language: what it allows, why that matters, and what to change.
+It runs locally, reads only, and never contacts a server.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/report-preview-dark.png">
+  <img alt="HTML report for the bundled demo project: severity counts, a permission map of rules by agent and capability, and the first critical finding with its explanation and fix." src="docs/images/report-preview-light.png" width="900">
+</picture>
+
+<sub>The HTML report for the bundled demo fixtures, unedited. Open the full page from <a href="examples/demo-report.html">examples/demo-report.html</a> after cloning.</sub>
 
 ```text
 $ agent-permission-map demo
@@ -45,25 +53,34 @@ credentials. It is built to be boring in that position:
   Env files (`envFile`) are listed but not opened. From `~/.claude.json` only MCP server entries
   are read; account details and other projects' entries are ignored.
 - **Deterministic.** Same files in, byte-identical report out, on Linux, macOS and Windows.
-  No timestamps, hostnames or absolute paths: paths are shown as `~/...` and `./...`.
+  Reports contain no timestamps or hostnames, and files under your home directory or the project
+  are shown as `~/...` and `./...`. Only files elsewhere, such as managed policy, keep an
+  absolute path.
 
 These properties are enforced by tests, not only promised. See [SECURITY.md](SECURITY.md).
 
 ## Quick start
 
-Requires Node.js 22 or later.
+Requires Node.js 22 or later. The package is not on npm yet. Run it straight from GitHub:
+
+```sh
+npx --yes github:jahau/agent-permission-map demo   # scan the bundled example fixtures
+npx --yes github:jahau/agent-permission-map        # scan ~ and the current directory
+```
+
+npx downloads the repository and builds it once. The scan itself makes no network requests.
+To work from a clone instead:
 
 ```sh
 git clone https://github.com/jahau/agent-permission-map
 cd agent-permission-map
-npm ci
-npm run demo                 # scan the bundled example fixtures
-
-node dist/bin.js             # scan ~ and the current directory
+npm ci                       # also builds dist/
+npm run demo
 node dist/bin.js --project ~/code/my-repo --format html --out report.html
 ```
 
-<!-- When published to npm: npx agent-permission-map -->
+Text output goes to the terminal. JSON and HTML are easiest to keep with `--out`, which
+never replaces an existing file unless you add `--force`.
 
 ### Options
 
@@ -94,7 +111,7 @@ Check the agent configuration committed to a repository, without reading anyone'
 | Codex CLI | `~/.codex/config.toml`, `.codex/config.toml` | `approval_policy`, `sandbox_mode`, `sandbox_workspace_write`, profiles, `shell_environment_policy`, `[mcp_servers.*]` |
 | Cursor | `~/.cursor/mcp.json`, `.cursor/mcp.json`, `~/.cursor/cli-config.json`, `.cursor/cli.json` | MCP servers; CLI `permissions` (`Shell`, `Read`, `Write`, `WebFetch`, `Mcp`) |
 | Gemini CLI | `~/.gemini/settings.json`, `.gemini/settings.json`; system settings with `--system` | `tools.allowed/exclude/core/confirmationRequired`, `general.defaultApprovalMode`, `security.*`, `mcp.*`, `mcpServers` (including `trust`) |
-| VS Code | `.vscode/mcp.json`, user-profile `mcp.json` | `servers`, `inputs` |
+| VS Code | `.vscode/mcp.json`, default-profile user `mcp.json` (stable and Insiders) | `servers`, `inputs` |
 | Claude Desktop | `claude_desktop_config.json` | `mcpServers` |
 | Windsurf | `~/.codeium/windsurf/mcp_config.json` | `mcpServers` |
 | Copilot CLI | `~/.copilot/mcp-config.json` | `mcpServers` |
@@ -165,13 +182,18 @@ a pinned package version is itself safe.
   prove that the agent behaves that way in every version.
 - Layering is not resolved. Each file is reported on its own, so a project rule that a managed
   policy overrides is still listed.
-- Secret detection is heuristic. It errs toward redacting.
+- Secret detection is heuristic. It errs toward redacting, and a final pass removes well-known
+  token shapes from every string in the report. A credential with no recognizable name or
+  shape, in a field the tool echoes, can still slip through. Review a report before sharing it.
+- Rule text, server names, hostnames and env variable *names* are reported on purpose. They are
+  the inventory. Treat reports from your own machine as internal documents.
 
 ## Development
 
 ```sh
 npm ci
 npm test            # type-checks, compiles and runs the node:test suite
+npm run lint        # stricter compiler checks (unused code, missing returns, switch fallthrough)
 npm run demo:write  # regenerate examples/ after an intended output change, then review the diff
 npm run licenses    # offline dependency license check
 ```

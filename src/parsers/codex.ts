@@ -3,7 +3,7 @@ import { bool, isObj, scalar, str, type Obj } from "../read.js";
 import { emptyResult, type ParseContext, type ParseResult } from "../types.js";
 
 /** Analyze one layer: the top level of config.toml or one `[profiles.<name>]` table. */
-function analyzeLayer(layer: Obj, ctx: ParseContext, out: ParseResult, context?: string): void {
+function analyzeLayer(layer: Obj, out: ParseResult, context?: string): void {
   const ctxNote = context ? ` (${context})` : "";
   const extra = context ? { context } : {};
   const approvalRaw = layer.approval_policy;
@@ -92,7 +92,7 @@ export function parseCodexConfig(data: unknown, ctx: ParseContext): ParseResult 
     out.warnings.push("top level should be a table; nothing analyzed");
     return out;
   }
-  analyzeLayer(data, ctx, out);
+  analyzeLayer(data, out);
   if (ctx.scope === "project") {
     for (const key of ["profile", "profiles", "model_provider", "model_providers", "notify", "otel"]) {
       if (data[key] !== undefined) out.warnings.push(`"${key}" is ignored in project config files; set it in ~/.codex/config.toml`);
@@ -102,7 +102,7 @@ export function parseCodexConfig(data: unknown, ctx: ParseContext): ParseResult 
   if (isObj(data.profiles)) {
     for (const name of Object.keys(data.profiles).sort()) {
       const p = data.profiles[name];
-      if (isObj(p)) analyzeLayer(p, ctx, out, `profile: ${name}`);
+      if (isObj(p)) analyzeLayer(p, out, `profile: ${name}`);
     }
   }
   if (str(data.profile)) out.posture.push({ key: "profile", value: str(data.profile)! });

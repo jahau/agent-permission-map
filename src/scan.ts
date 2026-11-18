@@ -6,6 +6,7 @@ import { parseGeminiSettings } from "./parsers/gemini.js";
 import { parseCursorCli, parseMcpServersJson, parseVscodeMcp } from "./parsers/mcp-files.js";
 import { displayPath, normalizeFsPath } from "./paths.js";
 import { parseJsonText, parseTomlText, readConfigFile } from "./read.js";
+import { redactTokensDeep } from "./redact.js";
 import { SEVERITY_RANK } from "./risk.js";
 import {
   SEVERITIES,
@@ -191,7 +192,8 @@ export async function scan(opts: ScanOptions): Promise<Report> {
   for (const f of report.findings) s.findings[f.severity]++;
   s.highestSeverity = SEVERITIES.find((sev) => s.findings[sev] > 0) ?? null;
   s.agents = [...new Set(report.sources.map((x) => x.agent))].sort();
-  return report;
+  // Last line of defense: no token-shaped string survives anywhere in the report.
+  return redactTokensDeep(report);
 }
 
 function scopeOrder(scope: string): string {

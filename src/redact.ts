@@ -53,6 +53,30 @@ export function isInlineSecret(name: string, value: unknown): boolean {
   return v.length >= 6;
 }
 
+/** Replace only well-known token shapes. Used as a last pass over every string in a report. */
+export function redactTokens(text: string): string {
+  let out = text;
+  for (const p of TOKEN_PATTERNS) {
+    if (p.test(out)) out = out.replace(new RegExp(p.source, p.flags + "g"), REDACTED);
+  }
+  return out;
+}
+
+/** Deep-copy a JSON-like value, applying redactTokens to every string (keys included). */
+export function redactTokensDeep<T>(value: T): T {
+  if (typeof value === "string") return redactTokens(value) as T;
+  if (Array.isArray(value)) return value.map((v) => redactTokensDeep(v)) as T;
+  if (value !== null && typeof value === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(value)) {
+      // defineProperty, so a "__proto__" key stays an ordinary property
+      Object.defineProperty(out, redactTokens(k), { value: redactTokensDeep(v), enumerable: true, writable: true, configurable: true });
+    }
+    return out as T;
+  }
+  return value;
+}
+
 /** Replace token-shaped substrings in free text (hook commands, helper commands). */
 export function redactText(text: string): string {
   let out = text;
