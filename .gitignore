@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build-test/
+coverage/
+*.tgz
+.DS_Store
+# Reports you generate from your own machine may describe private setup details.
+agent-permission-map-report.*
+
+# Demo fixture; Claude Code adds **/.claude/settings.local.json to global git excludes.
+!fixtures/demo/acme-api/.claude/settings.local.json
