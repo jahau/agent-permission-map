@@ -1,0 +1,33 @@
+model = "gpt-5"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+network_access = false
+writable_roots = ["/tmp/build-cache"]
+
+[shell_environment_policy]
+inherit = "core"
+
+[mcp_servers.docs]
+command = "docs-server"
+args = ["--port", "4000"]
+env = { "LOG_LEVEL" = "info" }
+startup_timeout_sec = 20
+tool_timeout_sec = 60
+enabled = true
+
+[mcp_servers.figma]
+url = "https://mcp.figma.com/mcp"
+bearer_token_env_var = "FIGMA_OAUTH_TOKEN"
+http_headers = { "X-Figma-Region" = "us-east-1" }
+env_http_headers = { "X-Org-Id" = "FIGMA_ORG_ID" }
+disabled_tools = ["delete_file"]
+
+[mcp_servers.off]
+command = "old-server"
+enabled = false
+
+[profiles.ci]
+approval_policy = "never"
+sandbox_mode = "read-only"

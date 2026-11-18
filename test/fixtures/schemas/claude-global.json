@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "stripe": { "type": "http", "url": "https://mcp.stripe.com" }
+  },
+  "projects": {
+    "__PROJECT__": {
+      "mcpServers": {
+        "airtable": { "command": "npx", "args": ["-y", "airtable-mcp-server@1.4.0"], "env": { "AIRTABLE_API_KEY": "${AIRTABLE_API_KEY}" } }
+      },
+      "allowedTools": ["Bash(make build)"]
+    },
+    "/somewhere/else": {
+      "mcpServers": { "should-not-appear": { "command": "node" } }
+    }
+  }
+}

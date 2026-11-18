@@ -1,0 +1,25 @@
+{
+  "general": { "defaultApprovalMode": "plan" },
+  "tools": {
+    "sandbox": "docker",
+    "core": ["read_file", "run_shell_command(git)"],
+    "allowed": ["run_shell_command(git status)"],
+    "exclude": ["write_file"],
+    "confirmationRequired": ["web_fetch"]
+  },
+  "security": { "disableYoloMode": true, "folderTrust": { "enabled": true } },
+  "mcp": { "allowed": ["github"], "excluded": ["experimental"] },
+  "mcpServers": {
+    "github": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "ghcr.io/github/github-mcp-server:v0.9.0"],
+      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_TOKEN" },
+      "timeout": 30000,
+      "trust": false,
+      "includeTools": ["get_issue"],
+      "excludeTools": ["delete_repo"]
+    },
+    "remote": { "httpUrl": "https://mcp.example.com/mcp", "headers": { "Authorization": "Bearer $TOKEN" } },
+    "legacy-sse": { "url": "https://sse.example.com/sse" }
+  }
+}

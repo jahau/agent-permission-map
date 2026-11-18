@@ -1,0 +1,1149 @@
+{
+  "schemaVersion": 1,
+  "generator": {
+    "name": "agent-permission-map",
+    "version": "0.1.0"
+  },
+  "scan": {
+    "projectName": "acme-api",
+    "includeUser": true,
+    "includeSystem": false,
+    "locationsChecked": 25
+  },
+  "summary": {
+    "sources": 14,
+    "sourcesWithErrors": 1,
+    "permissionRules": 28,
+    "mcpServers": 14,
+    "hooks": 2,
+    "findings": {
+      "critical": 3,
+      "high": 9,
+      "medium": 16,
+      "low": 4,
+      "info": 12
+    },
+    "highestSeverity": "critical",
+    "agents": [
+      "claude-code",
+      "claude-desktop",
+      "codex",
+      "cursor",
+      "gemini-cli",
+      "vscode",
+      "windsurf"
+    ]
+  },
+  "sources": [
+    {
+      "id": "S01",
+      "agent": "claude-code",
+      "scope": "user",
+      "format": "claude-global",
+      "path": "~/.claude.json",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S02",
+      "agent": "claude-code",
+      "scope": "user",
+      "format": "claude-settings",
+      "path": "~/.claude/settings.json",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S03",
+      "agent": "claude-code",
+      "scope": "project",
+      "format": "claude-settings",
+      "path": "./.claude/settings.json",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S04",
+      "agent": "claude-code",
+      "scope": "project",
+      "format": "mcp-servers-json",
+      "path": "./.mcp.json",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S05",
+      "agent": "claude-code",
+      "scope": "local",
+      "format": "claude-settings",
+      "path": "./.claude/settings.local.json",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S06",
+      "agent": "claude-desktop",
+      "scope": "user",
+      "format": "mcp-servers-json",
+      "path": "~/AppData/Roaming/Claude/claude_desktop_config.json",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S07",
+      "agent": "codex",
+      "scope": "user",
+      "format": "codex-toml",
+      "path": "~/.codex/config.toml",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S08",
+      "agent": "codex",
+      "scope": "project",
+      "format": "codex-toml",
+      "path": "./.codex/config.toml",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S09",
+      "agent": "cursor",
+      "scope": "user",
+      "format": "mcp-servers-json",
+      "path": "~/.cursor/mcp.json",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S10",
+      "agent": "cursor",
+      "scope": "project",
+      "format": "cursor-cli",
+      "path": "./.cursor/cli.json",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S11",
+      "agent": "cursor",
+      "scope": "project",
+      "format": "mcp-servers-json",
+      "path": "./.cursor/mcp.json",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S12",
+      "agent": "gemini-cli",
+      "scope": "project",
+      "format": "gemini-settings",
+      "path": "./.gemini/settings.json",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S13",
+      "agent": "vscode",
+      "scope": "project",
+      "format": "vscode-mcp",
+      "path": "./.vscode/mcp.json",
+      "status": "parsed",
+      "warnings": []
+    },
+    {
+      "id": "S14",
+      "agent": "windsurf",
+      "scope": "user",
+      "format": "mcp-servers-json",
+      "path": "~/.codeium/windsurf/mcp_config.json",
+      "status": "error",
+      "warnings": [],
+      "error": "invalid JSON: CommaExpected at line 5, column 7"
+    }
+  ],
+  "permissions": [
+    {
+      "agent": "claude-code",
+      "source": "S02",
+      "effect": "deny",
+      "capability": "shell",
+      "rule": "Bash(rm -rf *)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S02",
+      "effect": "allow",
+      "capability": "shell",
+      "rule": "Bash(ls *)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S02",
+      "effect": "allow",
+      "capability": "file-read",
+      "rule": "Read(~/**)",
+      "broad": true
+    },
+    {
+      "agent": "claude-code",
+      "source": "S02",
+      "effect": "allow",
+      "capability": "directory",
+      "rule": "~/",
+      "broad": true
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "deny",
+      "capability": "file-read",
+      "rule": "Read(./.env)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "deny",
+      "capability": "file-read",
+      "rule": "Read(./.env.*)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "deny",
+      "capability": "file-read",
+      "rule": "Read(./secrets/**)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "ask",
+      "capability": "shell",
+      "rule": "Bash(git push *)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "allow",
+      "capability": "shell",
+      "rule": "Bash(curl *)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "allow",
+      "capability": "shell",
+      "rule": "Bash(git diff *)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "allow",
+      "capability": "shell",
+      "rule": "Bash(git status)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "allow",
+      "capability": "shell",
+      "rule": "Bash(npm run test *)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "allow",
+      "capability": "shell",
+      "rule": "Bash(python *)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "allow",
+      "capability": "file-write",
+      "rule": "Edit",
+      "broad": true
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "allow",
+      "capability": "network",
+      "rule": "WebFetch",
+      "broad": true
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "effect": "allow",
+      "capability": "mcp",
+      "rule": "mcp__postgres__query",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S05",
+      "effect": "allow",
+      "capability": "shell",
+      "rule": "Bash(docker *)",
+      "broad": false
+    },
+    {
+      "agent": "claude-code",
+      "source": "S05",
+      "effect": "allow",
+      "capability": "mcp",
+      "rule": "mcp__github__*",
+      "broad": true
+    },
+    {
+      "agent": "codex",
+      "source": "S08",
+      "effect": "allow",
+      "capability": "network",
+      "rule": "sandbox_workspace_write.network_access = true",
+      "broad": true
+    },
+    {
+      "agent": "cursor",
+      "source": "S10",
+      "effect": "deny",
+      "capability": "file-read",
+      "rule": "Read(.env*)",
+      "broad": false
+    },
+    {
+      "agent": "cursor",
+      "source": "S10",
+      "effect": "deny",
+      "capability": "shell",
+      "rule": "Shell(rm)",
+      "broad": false
+    },
+    {
+      "agent": "cursor",
+      "source": "S10",
+      "effect": "allow",
+      "capability": "mcp",
+      "rule": "Mcp(linear:*)",
+      "broad": true
+    },
+    {
+      "agent": "cursor",
+      "source": "S10",
+      "effect": "allow",
+      "capability": "shell",
+      "rule": "Shell(git)",
+      "broad": false
+    },
+    {
+      "agent": "cursor",
+      "source": "S10",
+      "effect": "allow",
+      "capability": "shell",
+      "rule": "Shell(npm:*)",
+      "broad": false
+    },
+    {
+      "agent": "cursor",
+      "source": "S10",
+      "effect": "allow",
+      "capability": "file-write",
+      "rule": "Write(**)",
+      "broad": true
+    },
+    {
+      "agent": "gemini-cli",
+      "source": "S12",
+      "effect": "deny",
+      "capability": "network",
+      "rule": "web_fetch",
+      "broad": true
+    },
+    {
+      "agent": "gemini-cli",
+      "source": "S12",
+      "effect": "allow",
+      "capability": "shell",
+      "rule": "run_shell_command",
+      "broad": true
+    },
+    {
+      "agent": "gemini-cli",
+      "source": "S12",
+      "effect": "allow",
+      "capability": "shell",
+      "rule": "run_shell_command(git status)",
+      "broad": false
+    }
+  ],
+  "posture": [
+    {
+      "agent": "claude-code",
+      "source": "S02",
+      "key": "permissions.defaultMode",
+      "value": "bypassPermissions"
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "key": "enableAllProjectMcpServers",
+      "value": true
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "key": "env",
+      "value": "NODE_ENV"
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "key": "permissions.defaultMode",
+      "value": "acceptEdits"
+    },
+    {
+      "agent": "claude-code",
+      "source": "S05",
+      "key": "env",
+      "value": "GITHUB_TOKEN"
+    },
+    {
+      "agent": "codex",
+      "source": "S07",
+      "key": "approval_policy",
+      "value": "on-request"
+    },
+    {
+      "agent": "codex",
+      "source": "S07",
+      "key": "approval_policy",
+      "value": "never",
+      "context": "profile: yolo"
+    },
+    {
+      "agent": "codex",
+      "source": "S07",
+      "key": "sandbox_mode",
+      "value": "danger-full-access",
+      "context": "profile: yolo"
+    },
+    {
+      "agent": "codex",
+      "source": "S08",
+      "key": "approval_policy",
+      "value": "never"
+    },
+    {
+      "agent": "codex",
+      "source": "S08",
+      "key": "sandbox_mode",
+      "value": "workspace-write"
+    },
+    {
+      "agent": "codex",
+      "source": "S08",
+      "key": "sandbox_workspace_write.network_access",
+      "value": true
+    },
+    {
+      "agent": "gemini-cli",
+      "source": "S12",
+      "key": "general.defaultApprovalMode",
+      "value": "auto_edit"
+    },
+    {
+      "agent": "vscode",
+      "source": "S13",
+      "key": "inputs",
+      "value": "github-token (password)"
+    }
+  ],
+  "mcpServers": [
+    {
+      "agent": "claude-code",
+      "source": "S01",
+      "name": "memory",
+      "transport": "stdio",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory@2025.8.4"
+      ],
+      "envKeys": [],
+      "headerKeys": [],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "command": "npx",
+      "context": "user scope"
+    },
+    {
+      "agent": "claude-code",
+      "source": "S04",
+      "name": "build-tools",
+      "transport": "stdio",
+      "args": [
+        "-c",
+        "cd tools && ./mcp-server.sh --stdio"
+      ],
+      "envKeys": [],
+      "headerKeys": [],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "command": "bash"
+    },
+    {
+      "agent": "claude-code",
+      "source": "S04",
+      "name": "filesystem",
+      "transport": "stdio",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem@2025.8.21",
+        "./src"
+      ],
+      "envKeys": [],
+      "headerKeys": [],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "command": "npx"
+    },
+    {
+      "agent": "claude-code",
+      "source": "S04",
+      "name": "internal-docs",
+      "transport": "http",
+      "args": [],
+      "envKeys": [],
+      "headerKeys": [],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "url": "http://docs.acme.internal/mcp"
+    },
+    {
+      "agent": "claude-code",
+      "source": "S04",
+      "name": "postgres",
+      "transport": "stdio",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://[REDACTED]@db.acme.internal:5432/app"
+      ],
+      "envKeys": [],
+      "headerKeys": [],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "command": "npx"
+    },
+    {
+      "agent": "claude-desktop",
+      "source": "S06",
+      "name": "filesystem",
+      "transport": "stdio",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "~/Documents"
+      ],
+      "envKeys": [],
+      "headerKeys": [],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "command": "npx"
+    },
+    {
+      "agent": "codex",
+      "source": "S07",
+      "name": "github",
+      "transport": "http",
+      "args": [],
+      "envKeys": [],
+      "headerKeys": [
+        "Authorization"
+      ],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "toolsAllowed": [
+        "get_issue",
+        "list_pull_requests"
+      ]
+    },
+    {
+      "agent": "codex",
+      "source": "S08",
+      "name": "fetch",
+      "transport": "stdio",
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "envKeys": [],
+      "headerKeys": [],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "command": "uvx"
+    },
+    {
+      "agent": "cursor",
+      "source": "S09",
+      "name": "notes",
+      "transport": "stdio",
+      "args": [
+        "/opt/notes-mcp/index.js"
+      ],
+      "envKeys": [
+        "NOTES_API_KEY"
+      ],
+      "headerKeys": [],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "command": "node"
+    },
+    {
+      "agent": "cursor",
+      "source": "S11",
+      "name": "browser",
+      "transport": "stdio",
+      "args": [
+        "@playwright/mcp@latest"
+      ],
+      "envKeys": [],
+      "headerKeys": [],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "command": "npx"
+    },
+    {
+      "agent": "cursor",
+      "source": "S11",
+      "name": "linear",
+      "transport": "http",
+      "args": [],
+      "envKeys": [],
+      "headerKeys": [
+        "Authorization"
+      ],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "url": "https://mcp.linear.app/sse"
+    },
+    {
+      "agent": "gemini-cli",
+      "source": "S12",
+      "name": "jira",
+      "transport": "http",
+      "args": [],
+      "envKeys": [],
+      "headerKeys": [],
+      "enabled": true,
+      "autoApprove": "all",
+      "url": "https://jira.acme.example/mcp"
+    },
+    {
+      "agent": "vscode",
+      "source": "S13",
+      "name": "github",
+      "transport": "http",
+      "args": [],
+      "envKeys": [],
+      "headerKeys": [
+        "Authorization"
+      ],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
+    {
+      "agent": "vscode",
+      "source": "S13",
+      "name": "sqlite",
+      "transport": "stdio",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-v",
+        "/:/host",
+        "mcp/sqlite",
+        "--db-path",
+        "/host/tmp/app.db"
+      ],
+      "envKeys": [],
+      "headerKeys": [],
+      "enabled": true,
+      "autoApprove": "unspecified",
+      "command": "docker"
+    }
+  ],
+  "hooks": [
+    {
+      "agent": "claude-code",
+      "source": "S02",
+      "event": "Notification",
+      "type": "command",
+      "command": "notify-send 'Claude Code' 'Needs your input'"
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "event": "PostToolUse",
+      "type": "command",
+      "command": "npx prettier --write \"$CLAUDE_PROJECT_DIR\"/src",
+      "matcher": "Edit|Write"
+    }
+  ],
+  "findings": [
+    {
+      "agent": "claude-code",
+      "source": "S02",
+      "ruleId": "claude.mode-bypass",
+      "severity": "critical",
+      "subject": "permissions.defaultMode = bypassPermissions",
+      "title": "Sessions start with permission prompts disabled",
+      "explanation": "Every session starts in `bypassPermissions` mode: Claude Code runs commands, edits files (including `.git` and `.claude`) and calls tools without asking. Anthropic recommends this only inside isolated containers or VMs.",
+      "recommendation": "Remove the setting and use `--permission-mode bypassPermissions` only for sessions inside a sandbox. Consider `permissions.disableBypassPermissionsMode: \"disable\"`."
+    },
+    {
+      "agent": "codex",
+      "source": "S07",
+      "ruleId": "codex.sandbox-full-access",
+      "severity": "critical",
+      "subject": "sandbox_mode = danger-full-access, approval_policy = never (profile: yolo)",
+      "title": "No sandbox and no approvals",
+      "explanation": "Codex runs every command with full filesystem and network access and never asks first. Any prompt injection becomes code execution as your user.",
+      "recommendation": "Use `workspace-write` (the default sandbox) and reserve `danger-full-access` for disposable containers."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S04",
+      "ruleId": "mcp.inline-secret",
+      "severity": "critical",
+      "subject": "postgres",
+      "title": "Credential written directly in the config file",
+      "explanation": "A value in command arguments looks like a literal credential. It is stored in plain text in a file meant to be committed to the repository, ends up in backups and screen shares, and is readable by any process running as you. The value is not shown in this report.",
+      "recommendation": "Move the value to an environment variable or the client's secret input (for example `${env:NAME}` or `${input:id}`), then rotate the credential."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S02",
+      "ruleId": "claude.additional-directory-broad",
+      "severity": "high",
+      "subject": "~/",
+      "title": "Home directory or filesystem root added as a working directory",
+      "explanation": "Claude Code treats additional directories like the project: it reads them without asking and, in `acceptEdits` mode, edits them. This one covers your whole home directory or drive.",
+      "recommendation": "Add only the specific directories the project needs."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S05",
+      "ruleId": "claude.env-inline-secret",
+      "severity": "high",
+      "subject": "env.GITHUB_TOKEN",
+      "title": "Credential written directly in settings",
+      "explanation": "`env.GITHUB_TOKEN` looks like a literal credential. Claude Code passes it to every session and to the commands it runs. The value is not shown in this report.",
+      "recommendation": "Set the variable in your shell or a secret manager instead, and rotate the credential."
+    },
+    {
+      "agent": "gemini-cli",
+      "source": "S12",
+      "ruleId": "mcp.auto-approved",
+      "severity": "high",
+      "subject": "jira",
+      "title": "All of this server's tools run without confirmation",
+      "explanation": "The client is configured to trust this server, so every tool it exposes runs without a prompt. Tool descriptions and results are model input, so a malicious or compromised server can steer the agent and act immediately.",
+      "recommendation": "Remove the blanket trust and approve individual read-only tools instead."
+    },
+    {
+      "agent": "vscode",
+      "source": "S13",
+      "ruleId": "mcp.container-escape",
+      "severity": "high",
+      "subject": "sqlite",
+      "title": "Container runs with host-level access",
+      "explanation": "The container is started with a host root, home or Docker socket mount, which removes most of the isolation a container would otherwise provide.",
+      "recommendation": "Drop the privileged options and mount only the directories the server needs, read-only where possible."
+    },
+    {
+      "agent": "cursor",
+      "source": "S09",
+      "ruleId": "mcp.inline-secret",
+      "severity": "high",
+      "subject": "notes",
+      "title": "Credential written directly in the config file",
+      "explanation": "A value in `env.NOTES_API_KEY` looks like a literal credential. It is stored in plain text, ends up in backups and screen shares, and is readable by any process running as you. The value is not shown in this report.",
+      "recommendation": "Move the value to an environment variable or the client's secret input (for example `${env:NAME}` or `${input:id}`), then rotate the credential."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S04",
+      "ruleId": "mcp.plaintext-remote",
+      "severity": "high",
+      "subject": "internal-docs",
+      "title": "Remote server is reached without TLS",
+      "explanation": "`docs.acme.internal` is contacted over `http`. Anyone on the network path can read tool calls and results, and can inject tool descriptions or responses.",
+      "recommendation": "Use an `https://` (or `wss://`) URL."
+    },
+    {
+      "agent": "gemini-cli",
+      "source": "S12",
+      "ruleId": "shell.allow-all",
+      "severity": "high",
+      "subject": "run_shell_command",
+      "title": "Every shell command runs without asking",
+      "explanation": "Gemini CLI will run any shell command the model chooses without a confirmation prompt. A prompt injection in a file, web page or tool result can then run arbitrary code with your user's permissions. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.",
+      "recommendation": "Replace the blanket rule with specific commands (for example `npm test`), and add deny rules for network and destructive commands."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "ruleId": "shell.allow-code-runner",
+      "severity": "high",
+      "subject": "Bash(python *)",
+      "title": "`python` may run with any arguments",
+      "explanation": "`python` executes whatever code or command it is given, so allowing it with a wildcard is equivalent to allowing every shell command. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.",
+      "recommendation": "Allow the exact invocations you need instead of `python` with a wildcard."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S05",
+      "ruleId": "shell.allow-code-runner",
+      "severity": "high",
+      "subject": "Bash(docker *)",
+      "title": "`docker` may run with any arguments",
+      "explanation": "`docker` executes whatever code or command it is given, so allowing it with a wildcard is equivalent to allowing every shell command.",
+      "recommendation": "Allow the exact invocations you need instead of `docker` with a wildcard."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "ruleId": "claude.allow-all-fetch",
+      "severity": "medium",
+      "subject": "WebFetch",
+      "title": "Fetches to any domain are approved",
+      "explanation": "Claude Code can request any URL without asking. Data can be sent out in the URL itself, and fetched pages are a common prompt-injection source. This file is committed with the repository, so the rule applies to everyone who trusts the folder.",
+      "recommendation": "Allow specific domains with `WebFetch(domain:example.com)`."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "ruleId": "claude.allow-all-writes",
+      "severity": "medium",
+      "subject": "Edit",
+      "title": "File edits are approved everywhere the rule reaches",
+      "explanation": "Claude Code can create and modify files without asking, including build scripts, CI workflows and git hooks that later run code. This file is committed with the repository, so the rule applies to everyone who trusts the folder.",
+      "recommendation": "Prefer `acceptEdits` mode for a session, or scope the rule to source directories (for example `Edit(./src/**)`)."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S02",
+      "ruleId": "claude.allow-reads-outside-project",
+      "severity": "medium",
+      "subject": "Read(~/**)",
+      "title": "Reads outside the project are approved",
+      "explanation": "The rule lets Claude Code read files across your home directory or the whole filesystem without asking, including SSH keys, cloud credentials and browser data.",
+      "recommendation": "Limit read rules to the project or to specific directories, and add deny rules for credential paths."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "ruleId": "claude.enable-all-project-mcp",
+      "severity": "medium",
+      "subject": "enableAllProjectMcpServers = true",
+      "title": "MCP servers from project files are approved automatically",
+      "explanation": "Every server in this project's `.mcp.json` starts without its approval prompt once the folder is trusted, including servers added by later commits.",
+      "recommendation": "Remove the setting and approve servers by name with `enabledMcpjsonServers`."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "ruleId": "claude.hook-command",
+      "severity": "medium",
+      "subject": "PostToolUse [Edit|Write]: npx prettier --write \"$CLAUDE_PROJECT_DIR\"/src",
+      "title": "Repository settings run a shell command automatically",
+      "explanation": "On `PostToolUse`, Claude Code runs this command with your user's permissions, without a prompt, once the folder is trusted. Anyone who can change this file can change what runs.",
+      "recommendation": "Review the command and the script it calls; keep such hooks small and in-repo."
+    },
+    {
+      "agent": "codex",
+      "source": "S08",
+      "ruleId": "codex.approval-never",
+      "severity": "medium",
+      "subject": "approval_policy = never",
+      "title": "Codex never asks before running commands",
+      "explanation": "Within the sandbox, commands run without any approval prompt, and failures are not escalated to you. The sandbox still limits writes to the workspace.",
+      "recommendation": "Use `on-request` for interactive work; keep `never` for CI runs in disposable environments."
+    },
+    {
+      "agent": "codex",
+      "source": "S08",
+      "ruleId": "codex.sandbox-network",
+      "severity": "medium",
+      "subject": "sandbox_workspace_write.network_access = true",
+      "title": "Sandboxed commands can reach the network",
+      "explanation": "Commands inside the sandbox may open outbound connections, so a prompt-injected command can upload workspace files or fetch and run code.",
+      "recommendation": "Leave network access off and allow it per task."
+    },
+    {
+      "agent": "cursor",
+      "source": "S10",
+      "ruleId": "cursor.allow-all-writes",
+      "severity": "medium",
+      "subject": "Write(**)",
+      "title": "File writes are approved everywhere the rule reaches",
+      "explanation": "The Cursor agent can create and modify any file in the workspace without asking, including scripts and CI files that run code later.",
+      "recommendation": "Scope write rules to the directories the agent should change."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S04",
+      "ruleId": "mcp.shell-wrapper",
+      "severity": "medium",
+      "subject": "build-tools",
+      "title": "Server is started through an inline script",
+      "explanation": "The server is launched as `bash -c …`, so the real command is a script string. Inline scripts are hard to review and can chain extra commands, downloads or environment changes before the server starts.",
+      "recommendation": "Point `command` at the server executable directly, or move the script into a reviewed file in the repository."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S04",
+      "ruleId": "mcp.unpinned-package",
+      "severity": "medium",
+      "subject": "postgres",
+      "title": "`npx` downloads `@modelcontextprotocol/server-postgres` without a fixed version",
+      "explanation": "Each start resolves the newest published version of `@modelcontextprotocol/server-postgres` and runs it with your user's permissions. A compromised or hijacked release reaches you automatically, before you review it.",
+      "recommendation": "Pin an exact version (for example `@modelcontextprotocol/server-postgres@1.2.3`) and update it deliberately."
+    },
+    {
+      "agent": "claude-desktop",
+      "source": "S06",
+      "ruleId": "mcp.unpinned-package",
+      "severity": "medium",
+      "subject": "filesystem",
+      "title": "`npx` downloads `@modelcontextprotocol/server-filesystem` without a fixed version",
+      "explanation": "Each start resolves the newest published version of `@modelcontextprotocol/server-filesystem` and runs it with your user's permissions. A compromised or hijacked release reaches you automatically, before you review it.",
+      "recommendation": "Pin an exact version (for example `@modelcontextprotocol/server-filesystem@1.2.3`) and update it deliberately."
+    },
+    {
+      "agent": "codex",
+      "source": "S08",
+      "ruleId": "mcp.unpinned-package",
+      "severity": "medium",
+      "subject": "fetch",
+      "title": "`uvx` downloads `mcp-server-fetch` without a fixed version",
+      "explanation": "Each start resolves the newest published version of `mcp-server-fetch` and runs it with your user's permissions. A compromised or hijacked release reaches you automatically, before you review it.",
+      "recommendation": "Pin an exact version (for example `mcp-server-fetch@1.2.3`) and update it deliberately."
+    },
+    {
+      "agent": "cursor",
+      "source": "S11",
+      "ruleId": "mcp.unpinned-package",
+      "severity": "medium",
+      "subject": "browser",
+      "title": "`npx` downloads `@playwright/mcp@latest` without a fixed version",
+      "explanation": "Each start resolves the newest published version of `@playwright/mcp@latest` and runs it with your user's permissions. A compromised or hijacked release reaches you automatically, before you review it.",
+      "recommendation": "Pin an exact version (for example `@playwright/mcp@1.2.3`) and update it deliberately."
+    },
+    {
+      "agent": "cursor",
+      "source": "S10",
+      "ruleId": "shell.allow-destructive",
+      "severity": "medium",
+      "subject": "Shell(git)",
+      "title": "`git` may run with any arguments",
+      "explanation": "`git` can delete or rewrite files and history. With a wildcard there is no prompt before, for example, a recursive delete or a force push. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.",
+      "recommendation": "Allow the specific, non-destructive forms you need, and add deny or ask rules for the destructive ones."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "ruleId": "shell.allow-network-tool",
+      "severity": "medium",
+      "subject": "Bash(curl *)",
+      "title": "`curl` may reach any host",
+      "explanation": "A wildcard rule for `curl` lets the agent download code or upload local files to any address without asking, which is the usual exfiltration path after a prompt injection. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.",
+      "recommendation": "Remove the rule and use the agent's own fetch tool with a domain allowlist, or allow only specific URLs."
+    },
+    {
+      "agent": "cursor",
+      "source": "S10",
+      "ruleId": "shell.allow-script-runner",
+      "severity": "medium",
+      "subject": "Shell(npm:*)",
+      "title": "`npm` may run any project script",
+      "explanation": "`npm` with a wildcard runs whatever the project's build files define, and some subcommands install or execute packages. The agent can edit those files and then run them. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.",
+      "recommendation": "Allow the specific subcommands you need (for example `npm test`)."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S05",
+      "ruleId": "claude.allow-mcp-server",
+      "severity": "low",
+      "subject": "mcp__github__*",
+      "title": "Every tool of MCP server `github` runs without asking",
+      "explanation": "Tools added to the server later are approved automatically too, including ones that write data or call external services.",
+      "recommendation": "List the specific tools instead (for example `mcp__github__search`)."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S03",
+      "ruleId": "claude.mode-accept-edits",
+      "severity": "low",
+      "subject": "permissions.defaultMode = acceptEdits",
+      "title": "File edits are accepted without asking",
+      "explanation": "File edits and common filesystem commands in the working directories run without a prompt. Edits to build scripts or CI files can lead to code running later.",
+      "recommendation": "Review diffs before running builds, or use the default mode for untrusted repositories."
+    },
+    {
+      "agent": "cursor",
+      "source": "S10",
+      "ruleId": "cursor.allow-mcp-wildcard",
+      "severity": "low",
+      "subject": "Mcp(linear:*)",
+      "title": "Every tool of MCP server `linear` runs without asking",
+      "explanation": "Tools added later are approved automatically too, including ones that write data or call external services.",
+      "recommendation": "List individual tools, for example `Mcp(github:get_issue)`."
+    },
+    {
+      "agent": "gemini-cli",
+      "source": "S12",
+      "ruleId": "gemini.mode-auto-edit",
+      "severity": "low",
+      "subject": "general.defaultApprovalMode = auto_edit",
+      "title": "File edits are approved automatically",
+      "explanation": "Edit tools run without a prompt in every session. Edits to build scripts or CI files can lead to code running later.",
+      "recommendation": "Use the default mode for repositories you do not control."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S02",
+      "ruleId": "claude.hook-command",
+      "severity": "info",
+      "subject": "Notification: notify-send 'Claude Code' 'Needs your input'",
+      "title": "Hook runs a shell command automatically",
+      "explanation": "On `Notification`, Claude Code runs this command without a prompt. Hooks are not limited by permission rules.",
+      "recommendation": "Confirm the command is one you added and still need."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S04",
+      "ruleId": "mcp.project-command",
+      "severity": "info",
+      "subject": "build-tools",
+      "title": "Repository config can start a local process",
+      "explanation": "This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.",
+      "recommendation": "Review changes to this file in code review as you would changes to a build script."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S04",
+      "ruleId": "mcp.project-command",
+      "severity": "info",
+      "subject": "filesystem",
+      "title": "Repository config can start a local process",
+      "explanation": "This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.",
+      "recommendation": "Review changes to this file in code review as you would changes to a build script."
+    },
+    {
+      "agent": "claude-code",
+      "source": "S04",
+      "ruleId": "mcp.project-command",
+      "severity": "info",
+      "subject": "postgres",
+      "title": "Repository config can start a local process",
+      "explanation": "This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.",
+      "recommendation": "Review changes to this file in code review as you would changes to a build script."
+    },
+    {
+      "agent": "codex",
+      "source": "S08",
+      "ruleId": "mcp.project-command",
+      "severity": "info",
+      "subject": "fetch",
+      "title": "Repository config can start a local process",
+      "explanation": "This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.",
+      "recommendation": "Review changes to this file in code review as you would changes to a build script."
+    },
+    {
+      "agent": "cursor",
+      "source": "S11",
+      "ruleId": "mcp.project-command",
+      "severity": "info",
+      "subject": "browser",
+      "title": "Repository config can start a local process",
+      "explanation": "This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.",
+      "recommendation": "Review changes to this file in code review as you would changes to a build script."
+    },
+    {
+      "agent": "vscode",
+      "source": "S13",
+      "ruleId": "mcp.project-command",
+      "severity": "info",
+      "subject": "sqlite",
+      "title": "Repository config can start a local process",
+      "explanation": "This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.",
+      "recommendation": "Review changes to this file in code review as you would changes to a build script."
+    },
+    {
+      "agent": "codex",
+      "source": "S07",
+      "ruleId": "mcp.remote-server",
+      "severity": "info",
+      "subject": "github",
+      "title": "Tool calls are sent to `api.githubcopilot.com`",
+      "explanation": "Arguments the agent passes to this server's tools, which can include file contents, leave your machine for `api.githubcopilot.com`.",
+      "recommendation": "Confirm you trust the operator of this host with the data your agent handles."
+    },
+    {
+      "agent": "cursor",
+      "source": "S11",
+      "ruleId": "mcp.remote-server",
+      "severity": "info",
+      "subject": "linear",
+      "title": "Tool calls are sent to `mcp.linear.app`",
+      "explanation": "Arguments the agent passes to this server's tools, which can include file contents, leave your machine for `mcp.linear.app`.",
+      "recommendation": "Confirm you trust the operator of this host with the data your agent handles."
+    },
+    {
+      "agent": "gemini-cli",
+      "source": "S12",
+      "ruleId": "mcp.remote-server",
+      "severity": "info",
+      "subject": "jira",
+      "title": "Tool calls are sent to `jira.acme.example`",
+      "explanation": "Arguments the agent passes to this server's tools, which can include file contents, leave your machine for `jira.acme.example`.",
+      "recommendation": "Confirm you trust the operator of this host with the data your agent handles."
+    },
+    {
+      "agent": "vscode",
+      "source": "S13",
+      "ruleId": "mcp.remote-server",
+      "severity": "info",
+      "subject": "github",
+      "title": "Tool calls are sent to `api.githubcopilot.com`",
+      "explanation": "Arguments the agent passes to this server's tools, which can include file contents, leave your machine for `api.githubcopilot.com`.",
+      "recommendation": "Confirm you trust the operator of this host with the data your agent handles."
+    },
+    {
+      "ruleId": "source.unreadable",
+      "severity": "info",
+      "agent": "windsurf",
+      "source": "S14",
+      "subject": "~/.codeium/windsurf/mcp_config.json",
+      "title": "File could not be analyzed",
+      "explanation": "invalid JSON: CommaExpected at line 5, column 7. The agent may also fail to load this file, or load it differently; its permissions are not part of this report.",
+      "recommendation": "Fix the file, then scan again."
+    }
+  ]
+}

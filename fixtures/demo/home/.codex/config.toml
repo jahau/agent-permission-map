@@ -1,0 +1,11 @@
+model = "gpt-5"
+approval_policy = "on-request"
+
+[profiles.yolo]
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+
+[mcp_servers.github]
+url = "https://api.githubcopilot.com/mcp/"
+bearer_token_env_var = "GITHUB_PAT"
+enabled_tools = ["get_issue", "list_pull_requests"]

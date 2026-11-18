@@ -1,0 +1,199 @@
+agent-permission-map 0.1.0
+
+Scanned 14 files for claude-code, claude-desktop, codex, cursor, gemini-cli, vscode, windsurf (25 locations checked).
+28 permission rules, 14 MCP servers, 2 hooks.
+Findings: 3 critical, 9 high, 16 medium, 4 low, 12 info
+
+Sources
+  S01  claude-code    user     ~/.claude.json
+  S02  claude-code    user     ~/.claude/settings.json
+  S03  claude-code    project  ./.claude/settings.json
+  S04  claude-code    project  ./.mcp.json
+  S05  claude-code    local    ./.claude/settings.local.json
+  S06  claude-desktop user     ~/AppData/Roaming/Claude/claude_desktop_config.json
+  S07  codex          user     ~/.codex/config.toml
+  S08  codex          project  ./.codex/config.toml
+  S09  cursor         user     ~/.cursor/mcp.json
+  S10  cursor         project  ./.cursor/cli.json
+  S11  cursor         project  ./.cursor/mcp.json
+  S12  gemini-cli     project  ./.gemini/settings.json
+  S13  vscode         project  ./.vscode/mcp.json
+  S14  windsurf       user     ~/.codeium/windsurf/mcp_config.json  ERROR: invalid JSON: CommaExpected at line 5, column 7
+
+Findings
+  [CRITICAL] Sessions start with permission prompts disabled
+      permissions.defaultMode = bypassPermissions  —  ~/.claude/settings.json
+      Why: Every session starts in `bypassPermissions` mode: Claude Code runs commands, edits files (including `.git` and `.claude`) and calls tools without asking. Anthropic recommends this only inside isolated containers or VMs.
+      Fix: Remove the setting and use `--permission-mode bypassPermissions` only for sessions inside a sandbox. Consider `permissions.disableBypassPermissionsMode: "disable"`.
+  [CRITICAL] No sandbox and no approvals
+      sandbox_mode = danger-full-access, approval_policy = never (profile: yolo)  —  ~/.codex/config.toml
+      Why: Codex runs every command with full filesystem and network access and never asks first. Any prompt injection becomes code execution as your user.
+      Fix: Use `workspace-write` (the default sandbox) and reserve `danger-full-access` for disposable containers.
+  [CRITICAL] Credential written directly in the config file
+      postgres  —  ./.mcp.json
+      Why: A value in command arguments looks like a literal credential. It is stored in plain text in a file meant to be committed to the repository, ends up in backups and screen shares, and is readable by any process running as you. The value is not shown in this report.
+      Fix: Move the value to an environment variable or the client's secret input (for example `${env:NAME}` or `${input:id}`), then rotate the credential.
+  [HIGH] Home directory or filesystem root added as a working directory
+      ~/  —  ~/.claude/settings.json
+      Why: Claude Code treats additional directories like the project: it reads them without asking and, in `acceptEdits` mode, edits them. This one covers your whole home directory or drive.
+      Fix: Add only the specific directories the project needs.
+  [HIGH] Credential written directly in settings
+      env.GITHUB_TOKEN  —  ./.claude/settings.local.json
+      Why: `env.GITHUB_TOKEN` looks like a literal credential. Claude Code passes it to every session and to the commands it runs. The value is not shown in this report.
+      Fix: Set the variable in your shell or a secret manager instead, and rotate the credential.
+  [HIGH] All of this server's tools run without confirmation
+      jira  —  ./.gemini/settings.json
+      Why: The client is configured to trust this server, so every tool it exposes runs without a prompt. Tool descriptions and results are model input, so a malicious or compromised server can steer the agent and act immediately.
+      Fix: Remove the blanket trust and approve individual read-only tools instead.
+  [HIGH] Container runs with host-level access
+      sqlite  —  ./.vscode/mcp.json
+      Why: The container is started with a host root, home or Docker socket mount, which removes most of the isolation a container would otherwise provide.
+      Fix: Drop the privileged options and mount only the directories the server needs, read-only where possible.
+  [HIGH] Credential written directly in the config file
+      notes  —  ~/.cursor/mcp.json
+      Why: A value in `env.NOTES_API_KEY` looks like a literal credential. It is stored in plain text, ends up in backups and screen shares, and is readable by any process running as you. The value is not shown in this report.
+      Fix: Move the value to an environment variable or the client's secret input (for example `${env:NAME}` or `${input:id}`), then rotate the credential.
+  [HIGH] Remote server is reached without TLS
+      internal-docs  —  ./.mcp.json
+      Why: `docs.acme.internal` is contacted over `http`. Anyone on the network path can read tool calls and results, and can inject tool descriptions or responses.
+      Fix: Use an `https://` (or `wss://`) URL.
+  [HIGH] Every shell command runs without asking
+      run_shell_command  —  ./.gemini/settings.json
+      Why: Gemini CLI will run any shell command the model chooses without a confirmation prompt. A prompt injection in a file, web page or tool result can then run arbitrary code with your user's permissions. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.
+      Fix: Replace the blanket rule with specific commands (for example `npm test`), and add deny rules for network and destructive commands.
+  [HIGH] `python` may run with any arguments
+      Bash(python *)  —  ./.claude/settings.json
+      Why: `python` executes whatever code or command it is given, so allowing it with a wildcard is equivalent to allowing every shell command. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.
+      Fix: Allow the exact invocations you need instead of `python` with a wildcard.
+  [HIGH] `docker` may run with any arguments
+      Bash(docker *)  —  ./.claude/settings.local.json
+      Why: `docker` executes whatever code or command it is given, so allowing it with a wildcard is equivalent to allowing every shell command.
+      Fix: Allow the exact invocations you need instead of `docker` with a wildcard.
+  [MEDIUM] Fetches to any domain are approved
+      WebFetch  —  ./.claude/settings.json
+      Why: Claude Code can request any URL without asking. Data can be sent out in the URL itself, and fetched pages are a common prompt-injection source. This file is committed with the repository, so the rule applies to everyone who trusts the folder.
+      Fix: Allow specific domains with `WebFetch(domain:example.com)`.
+  [MEDIUM] File edits are approved everywhere the rule reaches
+      Edit  —  ./.claude/settings.json
+      Why: Claude Code can create and modify files without asking, including build scripts, CI workflows and git hooks that later run code. This file is committed with the repository, so the rule applies to everyone who trusts the folder.
+      Fix: Prefer `acceptEdits` mode for a session, or scope the rule to source directories (for example `Edit(./src/**)`).
+  [MEDIUM] Reads outside the project are approved
+      Read(~/**)  —  ~/.claude/settings.json
+      Why: The rule lets Claude Code read files across your home directory or the whole filesystem without asking, including SSH keys, cloud credentials and browser data.
+      Fix: Limit read rules to the project or to specific directories, and add deny rules for credential paths.
+  [MEDIUM] MCP servers from project files are approved automatically
+      enableAllProjectMcpServers = true  —  ./.claude/settings.json
+      Why: Every server in this project's `.mcp.json` starts without its approval prompt once the folder is trusted, including servers added by later commits.
+      Fix: Remove the setting and approve servers by name with `enabledMcpjsonServers`.
+  [MEDIUM] Repository settings run a shell command automatically
+      PostToolUse [Edit|Write]: npx prettier --write "$CLAUDE_PROJECT_DIR"/src  —  ./.claude/settings.json
+      Why: On `PostToolUse`, Claude Code runs this command with your user's permissions, without a prompt, once the folder is trusted. Anyone who can change this file can change what runs.
+      Fix: Review the command and the script it calls; keep such hooks small and in-repo.
+  [MEDIUM] Codex never asks before running commands
+      approval_policy = never  —  ./.codex/config.toml
+      Why: Within the sandbox, commands run without any approval prompt, and failures are not escalated to you. The sandbox still limits writes to the workspace.
+      Fix: Use `on-request` for interactive work; keep `never` for CI runs in disposable environments.
+  [MEDIUM] Sandboxed commands can reach the network
+      sandbox_workspace_write.network_access = true  —  ./.codex/config.toml
+      Why: Commands inside the sandbox may open outbound connections, so a prompt-injected command can upload workspace files or fetch and run code.
+      Fix: Leave network access off and allow it per task.
+  [MEDIUM] File writes are approved everywhere the rule reaches
+      Write(**)  —  ./.cursor/cli.json
+      Why: The Cursor agent can create and modify any file in the workspace without asking, including scripts and CI files that run code later.
+      Fix: Scope write rules to the directories the agent should change.
+  [MEDIUM] Server is started through an inline script
+      build-tools  —  ./.mcp.json
+      Why: The server is launched as `bash -c …`, so the real command is a script string. Inline scripts are hard to review and can chain extra commands, downloads or environment changes before the server starts.
+      Fix: Point `command` at the server executable directly, or move the script into a reviewed file in the repository.
+  [MEDIUM] `npx` downloads `@modelcontextprotocol/server-postgres` without a fixed version
+      postgres  —  ./.mcp.json
+      Why: Each start resolves the newest published version of `@modelcontextprotocol/server-postgres` and runs it with your user's permissions. A compromised or hijacked release reaches you automatically, before you review it.
+      Fix: Pin an exact version (for example `@modelcontextprotocol/server-postgres@1.2.3`) and update it deliberately.
+  [MEDIUM] `npx` downloads `@modelcontextprotocol/server-filesystem` without a fixed version
+      filesystem  —  ~/AppData/Roaming/Claude/claude_desktop_config.json
+      Why: Each start resolves the newest published version of `@modelcontextprotocol/server-filesystem` and runs it with your user's permissions. A compromised or hijacked release reaches you automatically, before you review it.
+      Fix: Pin an exact version (for example `@modelcontextprotocol/server-filesystem@1.2.3`) and update it deliberately.
+  [MEDIUM] `uvx` downloads `mcp-server-fetch` without a fixed version
+      fetch  —  ./.codex/config.toml
+      Why: Each start resolves the newest published version of `mcp-server-fetch` and runs it with your user's permissions. A compromised or hijacked release reaches you automatically, before you review it.
+      Fix: Pin an exact version (for example `mcp-server-fetch@1.2.3`) and update it deliberately.
+  [MEDIUM] `npx` downloads `@playwright/mcp@latest` without a fixed version
+      browser  —  ./.cursor/mcp.json
+      Why: Each start resolves the newest published version of `@playwright/mcp@latest` and runs it with your user's permissions. A compromised or hijacked release reaches you automatically, before you review it.
+      Fix: Pin an exact version (for example `@playwright/mcp@1.2.3`) and update it deliberately.
+  [MEDIUM] `git` may run with any arguments
+      Shell(git)  —  ./.cursor/cli.json
+      Why: `git` can delete or rewrite files and history. With a wildcard there is no prompt before, for example, a recursive delete or a force push. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.
+      Fix: Allow the specific, non-destructive forms you need, and add deny or ask rules for the destructive ones.
+  [MEDIUM] `curl` may reach any host
+      Bash(curl *)  —  ./.claude/settings.json
+      Why: A wildcard rule for `curl` lets the agent download code or upload local files to any address without asking, which is the usual exfiltration path after a prompt injection. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.
+      Fix: Remove the rule and use the agent's own fetch tool with a domain allowlist, or allow only specific URLs.
+  [MEDIUM] `npm` may run any project script
+      Shell(npm:*)  —  ./.cursor/cli.json
+      Why: `npm` with a wildcard runs whatever the project's build files define, and some subcommands install or execute packages. The agent can edit those files and then run them. Because this file is shared through the repository, anyone who can commit to it can widen what the agent runs on your machine once you trust the folder.
+      Fix: Allow the specific subcommands you need (for example `npm test`).
+  [LOW] Every tool of MCP server `github` runs without asking
+      mcp__github__*  —  ./.claude/settings.local.json
+      Why: Tools added to the server later are approved automatically too, including ones that write data or call external services.
+      Fix: List the specific tools instead (for example `mcp__github__search`).
+  [LOW] File edits are accepted without asking
+      permissions.defaultMode = acceptEdits  —  ./.claude/settings.json
+      Why: File edits and common filesystem commands in the working directories run without a prompt. Edits to build scripts or CI files can lead to code running later.
+      Fix: Review diffs before running builds, or use the default mode for untrusted repositories.
+  [LOW] Every tool of MCP server `linear` runs without asking
+      Mcp(linear:*)  —  ./.cursor/cli.json
+      Why: Tools added later are approved automatically too, including ones that write data or call external services.
+      Fix: List individual tools, for example `Mcp(github:get_issue)`.
+  [LOW] File edits are approved automatically
+      general.defaultApprovalMode = auto_edit  —  ./.gemini/settings.json
+      Why: Edit tools run without a prompt in every session. Edits to build scripts or CI files can lead to code running later.
+      Fix: Use the default mode for repositories you do not control.
+  [INFO] Hook runs a shell command automatically
+      Notification: notify-send 'Claude Code' 'Needs your input'  —  ~/.claude/settings.json
+      Why: On `Notification`, Claude Code runs this command without a prompt. Hooks are not limited by permission rules.
+      Fix: Confirm the command is one you added and still need.
+  [INFO] Repository config can start a local process
+      build-tools  —  ./.mcp.json
+      Why: This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.
+      Fix: Review changes to this file in code review as you would changes to a build script.
+  [INFO] Repository config can start a local process
+      filesystem  —  ./.mcp.json
+      Why: This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.
+      Fix: Review changes to this file in code review as you would changes to a build script.
+  [INFO] Repository config can start a local process
+      postgres  —  ./.mcp.json
+      Why: This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.
+      Fix: Review changes to this file in code review as you would changes to a build script.
+  [INFO] Repository config can start a local process
+      fetch  —  ./.codex/config.toml
+      Why: This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.
+      Fix: Review changes to this file in code review as you would changes to a build script.
+  [INFO] Repository config can start a local process
+      browser  —  ./.cursor/mcp.json
+      Why: This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.
+      Fix: Review changes to this file in code review as you would changes to a build script.
+  [INFO] Repository config can start a local process
+      sqlite  —  ./.vscode/mcp.json
+      Why: This server is defined in a file inside the project. After you approve it, the client starts the command with your user's permissions every session, and later commits can change the command.
+      Fix: Review changes to this file in code review as you would changes to a build script.
+  [INFO] Tool calls are sent to `api.githubcopilot.com`
+      github  —  ~/.codex/config.toml
+      Why: Arguments the agent passes to this server's tools, which can include file contents, leave your machine for `api.githubcopilot.com`.
+      Fix: Confirm you trust the operator of this host with the data your agent handles.
+  [INFO] Tool calls are sent to `mcp.linear.app`
+      linear  —  ./.cursor/mcp.json
+      Why: Arguments the agent passes to this server's tools, which can include file contents, leave your machine for `mcp.linear.app`.
+      Fix: Confirm you trust the operator of this host with the data your agent handles.
+  [INFO] Tool calls are sent to `jira.acme.example`
+      jira  —  ./.gemini/settings.json
+      Why: Arguments the agent passes to this server's tools, which can include file contents, leave your machine for `jira.acme.example`.
+      Fix: Confirm you trust the operator of this host with the data your agent handles.
+  [INFO] Tool calls are sent to `api.githubcopilot.com`
+      github  —  ./.vscode/mcp.json
+      Why: Arguments the agent passes to this server's tools, which can include file contents, leave your machine for `api.githubcopilot.com`.
+      Fix: Confirm you trust the operator of this host with the data your agent handles.
+  [INFO] File could not be analyzed
+      ~/.codeium/windsurf/mcp_config.json  —  ~/.codeium/windsurf/mcp_config.json
+      Why: invalid JSON: CommaExpected at line 5, column 7. The agent may also fail to load this file, or load it differently; its permissions are not part of this report.
+      Fix: Fix the file, then scan again.
