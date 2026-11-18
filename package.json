@@ -31,6 +31,7 @@
     "build:test": "tsc -p tsconfig.test.json",
     "test": "npm run build:test && node --test \"build-test/test/*.test.js\"",
     "typecheck": "tsc -p tsconfig.test.json --noEmit",
+    "lint": "tsc -p tsconfig.test.json --noEmit --noUnusedLocals --noUnusedParameters --noFallthroughCasesInSwitch --noImplicitReturns",
     "demo": "npm run build && node dist/bin.js demo",
     "demo:write": "npm run build && node scripts/write-examples.mjs",
     "licenses": "node scripts/check-licenses.mjs",
@@ -51,6 +52,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jahau/agent-permission-map.git"
+  },
+  "homepage": "https://github.com/jahau/agent-permission-map#readme",
+  "bugs": {
+    "url": "https://github.com/jahau/agent-permission-map/issues"
   },
   "dependencies": {
     "jsonc-parser": "3.3.1",

@@ -88,3 +88,13 @@ test("redactUrl tolerates unparseable and templated URLs", () => {
   assert.equal(r.url, "${API_BASE_URL:-https://api.example.com}/mcp");
   assert.equal(r.hadCredentials, false);
 });
+
+test("redactTokensDeep reaches every string, including keys, without prototype tricks", async () => {
+  const { redactTokensDeep } = await import("../src/redact.js");
+  const input = JSON.parse(`{"a":["x ${fakeGithub}"],"__proto__":{"b":"${fakeOpenAi}"},"n":1,"z":null}`) as Record<string, unknown>;
+  const out = redactTokensDeep(input);
+  const text = JSON.stringify(out);
+  assert.ok(!text.includes(fakeGithub) && !text.includes(fakeOpenAi));
+  assert.equal(Object.getPrototypeOf(out), Object.prototype);
+  assert.ok(Object.prototype.hasOwnProperty.call(out, "__proto__"));
+});

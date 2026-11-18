@@ -177,3 +177,25 @@ test("a scan with broken files still reports the rest", async () => {
     await fs.rm(dir, { recursive: true, force: true });
   }
 });
+
+test("secrets in URL fields and odd positions never reach a report", async () => {
+  const fake = "gh" + "p_" + "C".repeat(36);
+  const dir = await tempDir();
+  try {
+    await writeFiles(dir, {
+      "home/.claude/settings.json": JSON.stringify({
+        allowedMcpServers: [{ serverUrl: "https://x.example/mcp?token=plainsecretvalue1" }, { serverCommand: ["srv", "--api-key", "plainsecretvalue2"] }],
+        hooks: { Stop: [{ hooks: [{ type: "http", url: "https://h.example/hook?key=plainsecretvalue3" }] }] },
+        permissions: { defaultMode: fake, allow: [`Bash(echo ${fake})`] },
+      }),
+      "proj/.gemini/settings.json": JSON.stringify({ general: { defaultApprovalMode: fake }, mcpServers: { s: { httpUrl: "https://u:plainsecretvalue4@g.example/mcp" } } }),
+    });
+    const report = await scan({ home: path.join(dir, "home"), project: path.join(dir, "proj"), env: {} });
+    const text = JSON.stringify(report);
+    for (const s of ["plainsecretvalue1", "plainsecretvalue2", "plainsecretvalue3", "plainsecretvalue4", fake]) {
+      assert.equal(text.includes(s), false, s);
+    }
+  } finally {
+    await fs.rm(dir, { recursive: true, force: true });
+  }
+});

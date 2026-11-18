@@ -43,7 +43,7 @@ h1{font-size:26px;margin:0 0 4px;letter-spacing:-.01em}
 h2{font-size:18px;margin:40px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 p.lede{color:var(--muted);margin:0 0 24px}
 code{font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--code);padding:1px 5px;border-radius:4px;word-break:break-word}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px}
 .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
 .card b{display:block;font-size:24px;line-height:1.2}
 .card span{color:var(--muted);font-size:13px}

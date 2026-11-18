@@ -1,6 +1,6 @@
 import { addServerMap } from "../mcp.js";
 import { bool, isObj, objKeys, scalar, str, strArray, type Obj } from "../read.js";
-import { isInlineSecret, redactText } from "../redact.js";
+import { isInlineSecret, redactArgs, redactText, redactUrl } from "../redact.js";
 import { shellAllowFinding } from "../risk.js";
 import { emptyResult, type Capability, type Effect, type ParseContext, type ParseResult } from "../types.js";
 import { normalizeFsPath, samePath } from "../paths.js";
@@ -233,7 +233,11 @@ export function parseClaudeSettings(data: unknown, ctx: ParseContext): ParseResu
     }
     for (const entry of v) {
       if (!isObj(entry)) continue;
-      const label = str(entry.serverName) ?? (Array.isArray(entry.serverCommand) ? entry.serverCommand.filter((x) => typeof x === "string").join(" ") : undefined) ?? str(entry.serverUrl);
+      const serverUrl = str(entry.serverUrl);
+      const label =
+        str(entry.serverName) ??
+        (Array.isArray(entry.serverCommand) ? redactArgs(entry.serverCommand.filter((x): x is string => typeof x === "string")).args.join(" ") : undefined) ??
+        (serverUrl !== undefined ? redactUrl(serverUrl).url : undefined);
       if (label) out.posture.push({ key, value: redactText(label) });
     }
   }
@@ -309,7 +313,8 @@ function parseHooks(hooks: unknown, ctx: ParseContext, out: ParseResult): void {
       for (const h of list) {
         if (!isObj(h)) continue;
         const type = str(h.type) ?? "command";
-        const command = redactText(str(h.command) ?? str(h.url) ?? str(h.prompt) ?? "");
+        const hookUrl = str(h.url);
+        const command = redactText(str(h.command) ?? (hookUrl !== undefined ? redactUrl(hookUrl).url : undefined) ?? str(h.prompt) ?? "");
         const hook = { event, type, command, ...(matcher !== undefined ? { matcher } : {}) };
         out.hooks.push(hook);
         if (type === "command" && command !== "") {
